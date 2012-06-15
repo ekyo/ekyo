@@ -22,6 +22,7 @@ echo deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen \
 apt-get -y update
 apt-get -y upgrade
 apt-get install -y mongodb-10gen 
+mongod --nojournal
 
 # Install Redis
 cd ~
