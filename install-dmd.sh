@@ -1,5 +1,5 @@
 # Install DMD
-echo "http://d-apt.googlecode.com/files /" >> /etc/apt/sources.list
+echo "deb http://d-apt.googlecode.com/files /" >> /etc/apt/sources.list
 apt-get update && apt-get -y --allow-unauthenticated install d-apt-keyring && apt-get update
 apt-get install -y \
     dmd \
