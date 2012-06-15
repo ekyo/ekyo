@@ -1,14 +1,19 @@
 # Install Redis
 cd ~
-wget http://redis.googlecode.com/files/redis-2.4.14.tar.gz
-tar xzf redis-2.4.14.tar.gz
-cd redis-2.4.14
+wget http://download.redis.io/redis-stable.tar.gz
+tar xzf redis-stable.tar.gz
+cd redis-stable
 make
-[ ! -f "/usr/local/bin/redis-server" ] && redis-server /usr/local/bin/
-[ ! -f "/usr/local/bin/redis-cli" ] && cp redis-cli /usr/local/bin/
-[ ! -d "/etc/redis" ] && mkdir /etc/redis
-[ ! -d "/var/redis" ] && mkdir /var/redis
-[ ! -d "/var/redis/6379" ] && mkdir /var/redis/6379
+[ ! -f "/usr/local/bin/redis-server" ] && \
+    cp redis-server /usr/local/bin/
+[ ! -f "/usr/local/bin/redis-cli" ] && \
+    cp redis-cli /usr/local/bin/
+[ ! -d "/etc/redis" ] && \
+    mkdir /etc/redis
+[ ! -d "/var/redis" ] && \
+    mkdir /var/redis
+[ ! -d "/var/redis/6379" ] && \
+    mkdir /var/redis/6379
 [ ! -f "/etc/init.d/redis_6379" ] && \
     cat utils/redis_init_script | \
     sed 's,REDIS_PORT,6379,g' \
