@@ -12,7 +12,6 @@ apt-get -y update
 apt-get -y upgrade
 apt-get install -y \
     ubuntu-desktop \
-    gnome-shell gnome-tweak-tool \
     haskell-platform haskell-platform-doc haskell-platform-prof \
     pidgin chromium-browser openssh-server
 
