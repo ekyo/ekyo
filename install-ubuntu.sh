@@ -13,7 +13,7 @@ apt-get -y upgrade
 apt-get install -y \
     ubuntu-desktop \
     gnome-shell gnome-tweak-tool \
-    xfce4-appfinder xfce4-panel thunar xfce4-session xfce4-settings xfdesktop xfwm4 \
+    haskell-platform haskell-platform-doc haskell-platform-prof \
     pidgin chromium-browser
 
 # Install MongoDB
@@ -51,7 +51,7 @@ make
 update-rc.d redis_6379 defaults
 
 # Install DMD
-echo "http://d-apt.googlecode.com/files /" >> /etc/apt/sources.list
+echo "deb http://d-apt.googlecode.com/files /" >> /etc/apt/sources.list
 apt-get update && apt-get -y --allow-unauthenticated install d-apt-keyring && apt-get update
 apt-get install -y \
     dmd \
