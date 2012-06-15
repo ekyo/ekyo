@@ -91,3 +91,10 @@ apt-get install -y emacs
     ln -s .dude-dot-files/.bashrc .bashrc
 [ ! -f .bash_profile ] && \
     ln -s .dude-dot-files/.bash_profile .bash_profile
+
+# Install nodejs
+apt-get install -y python-software-properties
+apt-add-repository -y ppa:chris-lea/node.js
+apt-get update
+apt-get install -y nodejs npm
+apt-get install -y nodejs-dev
