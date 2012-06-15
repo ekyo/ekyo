@@ -77,7 +77,7 @@ if [ -e .zshrc ]; then
 fi
 cp .oh-my-zsh/templates/zshrc.zsh-template .zshrc
 echo "export PATH=$PATH" >> .zshrc
-chsh -s 'which zsh'
+chsh -s zsh
 
 # Install emacs
 cd ~
