@@ -14,7 +14,7 @@ apt-get install -y \
     ubuntu-desktop \
     gnome-shell gnome-tweak-tool \
     haskell-platform haskell-platform-doc haskell-platform-prof \
-    pidgin chromium-browser
+    pidgin chromium-browser openssh-server
 
 # Install MongoDB
 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv 7F0CEB10
