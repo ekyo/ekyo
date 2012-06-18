@@ -102,4 +102,4 @@ apt-get install -y nodejs npm
 apt-get install -y nodejs-dev
 
 # Install coffee-script
-apt-get install coffeescript
+npm install -g coffee-script
