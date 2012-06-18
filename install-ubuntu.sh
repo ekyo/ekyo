@@ -1,4 +1,5 @@
 # Configure Git
+apt-get -y install git
 read -p "Name for git?" gituser
 read -p "Email for git?" email
 git config --global user.name $gituser
