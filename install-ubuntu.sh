@@ -1,3 +1,7 @@
+cd ~
+# Must be run as admin
+sudo su
+
 # Configure Git
 apt-get -y install git
 read -p "Name for git?" gituser
@@ -26,7 +30,7 @@ apt-get install -y mongodb-10gen
 mongod --nojournal
 
 # Install Redis
-cd ~
+#cd ~
 wget http://redis.googlecode.com/files/redis-2.4.14.tar.gz
 tar xzf redis-2.4.14.tar.gz
 cd redis-2.4.14
@@ -50,6 +54,7 @@ make
     sed 's,$REDIS_DATA_DIR,/var/redis/6379,g' \
     > /etc/redis/6379.conf
 update-rc.d redis_6379 defaults
+cd ..
 
 # Install DMD
 echo "deb http://d-apt.googlecode.com/files /" >> /etc/apt/sources.list
@@ -69,7 +74,7 @@ apt-get install -y \
     vibe vibe-doc
 
 # Install Zsh with Oh My Zsh
-cd ~
+#cd ~
 apt-get install -y zsh
 [ ! -d .oh-my-zsh ] && git clone https://github.com/robbyrussell/oh-my-zsh.git .oh-my-zsh
 if [ -e .zshrc ]; then
@@ -81,7 +86,7 @@ echo "export PATH=$PATH" >> .zshrc
 chsh -s /usr/bin/zsh
 
 # Install emacs
-cd ~
+#cd ~
 apt-get install -y emacs
 [ ! -d .dude-dot-files ] && \
     git clone --recursive git://github.com/ddude/dude-dot-files.git .dude-dot-files
