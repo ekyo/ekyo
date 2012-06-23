@@ -1,21 +1,20 @@
 cd ~
 # Must be run as admin
-sudo su
 
 # Configure Git
-apt-get -y install git
+sudo apt-get -y install git
 read -p "Name for git?" gituser
 read -p "Email for git?" email
-git config --global user.name $gituser
-git config --global user.email $email
-git config --global credential.helper cache
-git config --global credential.helper 'cache --timeout=3600'
+sudo git config --global user.name $gituser
+sudo git config --global user.email $email
+sudo git config --global credential.helper cache
+sudo git config --global credential.helper 'cache --timeout=3600'
 
 # Update System and Install configuration-less Programs
-apt-get -y dist-upgrade
-apt-get -y update
-apt-get -y upgrade
-apt-get install -y \
+sudo apt-get -y dist-upgrade
+sudo apt-get -y update
+sudo apt-get -y upgrade
+sudo apt-get install -y \
     ubuntu-desktop \
     haskell-platform haskell-platform-doc haskell-platform-prof \
     pidgin chromium-browser openssh-server
@@ -24,10 +23,10 @@ apt-get install -y \
 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv 7F0CEB10
 echo deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen \
     > /etc/apt/sources.list.d/10gen.list
-apt-get -y update
-apt-get -y upgrade
-apt-get install -y mongodb-10gen 
-mongod --nojournal
+sudo apt-get -y update
+sudo apt-get -y upgrade
+sudo apt-get install -y mongodb-10gen 
+sudo mongod --nojournal
 
 # Install Redis
 #cd ~
@@ -53,13 +52,13 @@ make
     sed 's,$REDIS_LOG_FILE,/var/log/redis_6379.log,g' \
     sed 's,$REDIS_DATA_DIR,/var/redis/6379,g' \
     > /etc/redis/6379.conf
-update-rc.d redis_6379 defaults
+sudo update-rc.d redis_6379 defaults
 cd ..
 
 # Install DMD
 echo "deb http://d-apt.googlecode.com/files /" >> /etc/apt/sources.list
-apt-get update && apt-get -y --allow-unauthenticated install d-apt-keyring && apt-get update
-apt-get install -y \
+sudo apt-get update && apt-get -y --allow-unauthenticated install d-apt-keyring && apt-get update
+sudo apt-get install -y \
     dmd \
     libgtkd-dev libgtkd-doc \
     libplot2kill-dev libplot2kill-doc \
@@ -75,7 +74,7 @@ apt-get install -y \
 
 # Install Zsh with Oh My Zsh
 #cd ~
-apt-get install -y zsh
+sudo apt-get install -y zsh
 [ ! -d .oh-my-zsh ] && git clone https://github.com/robbyrussell/oh-my-zsh.git .oh-my-zsh
 if [ -e .zshrc ]; then
     cp .zshrc .zshrc.back
@@ -87,7 +86,7 @@ chsh -s /usr/bin/zsh
 
 # Install emacs
 #cd ~
-apt-get install -y emacs
+sudo apt-get install -y emacs
 [ ! -d .dude-dot-files ] && \
     git clone --recursive git://github.com/ddude/dude-dot-files.git .dude-dot-files
 [ ! -f .emacs ] && \
@@ -100,11 +99,11 @@ apt-get install -y emacs
     ln -s .dude-dot-files/.bash_profile .bash_profile
 
 # Install nodejs
-apt-get install -y python-software-properties
-apt-add-repository -y ppa:chris-lea/node.js
-apt-get update
-apt-get install -y nodejs npm
-apt-get install -y nodejs-dev
+sudo apt-get install -y python-software-properties
+sudo apt-add-repository -y ppa:chris-lea/node.js
+sudo apt-get update
+sudo apt-get install -y nodejs npm
+sudo apt-get install -y nodejs-dev
 
 # Install coffee-script
-npm install -g coffee-script
+sudo npm install -g coffee-script
