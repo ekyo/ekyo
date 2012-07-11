@@ -16,6 +16,7 @@ apt-get -y update
 apt-get -y upgrade
 apt-get install -y \
     dkms \
+    texinfo \
     ubuntu-desktop ubuntu-tweak \
     haskell-platform haskell-platform-doc haskell-platform-prof \
     pidgin chromium-browser openssh-server
@@ -99,6 +100,13 @@ apt-get install -y emacs
 [ ! -f .bash_profile ] && \
     ln -s .dude-dot-files/.bash_profile .bash_profile
 
+# Install RubyGems
+apt-get install -y ruby ruby-dev
+apt-get install -y libyaml-ruby libzlib-ruby
+git clone https://github.com/rubygems/rubygems.git
+ruby rubygems/setup.rb
+ln -s /usr/bin/gem1.8 /usr/bin/gem
+
 # Install nodejs
 apt-get install -y python-software-properties
 apt-add-repository -y ppa:chris-lea/node.js
@@ -108,3 +116,5 @@ apt-get install -y nodejs-dev
 
 # Install coffee-script
 npm install -g coffee-script
+npm install -g design.io 
+npm install -g tower
