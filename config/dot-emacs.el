@@ -5,6 +5,13 @@
   (interactive)
   (shell-command "wmctrl -r :ACTIVE: -btoggle,fullscreen"))
 
+(defun iwb ()
+  "indent whole buffer"
+  (interactive)
+  (delete-trailing-whitespace)
+  (indent-region (point-min) (point-max) nil)
+  (untabify (point-min) (point-max)))
+
 ;; Set Thesaurus Key
 (eval-after-load "thesaurus"
   '(progn (setq thesaurus-bhl-api-key "699761ef74acd451675d335fa614f48e")))
@@ -20,6 +27,9 @@
 
 (global-set-key (kbd "<f11>")
                 'djcb-full-screen-toggle)
+
+(global-set-key (kbd "<f10>")
+                'iwb)
 
 (global-set-key (kbd "C-<f5>")
                 'linum-mode)
