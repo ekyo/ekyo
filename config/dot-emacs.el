@@ -22,7 +22,7 @@
 (define-key global-map "\C-ca" 'org-agenda)
 (setq org-log-done t)
 
-(defun djcb-full-screen-toggle ()
+(defun full-screen-toggle ()
   "toggle full-screen mode"
   (interactive)
   (shell-command "wmctrl -r :ACTIVE: -btoggle,fullscreen"))
@@ -33,6 +33,17 @@
   (delete-trailing-whitespace)
   (indent-region (point-min) (point-max) nil)
   (untabify (point-min) (point-max)))
+
+(defun indent-buffer ()
+  "Re-indents the current buffer."
+  (interactive)
+  (save-excursion
+    (indent-region (point-min) (point-max) nil)))
+
+(defun kill-current-buffer ()
+  "Kills the current buffer."
+  (interactive)
+  (kill-buffer (current-buffer)))
 
 ;; Set Thesaurus Key
 (eval-after-load "thesaurus"
@@ -48,13 +59,28 @@
                 'goto-line)
 
 (global-set-key (kbd "<f11>")
-                'djcb-full-screen-toggle)
+                'full-screen-toggle)
 
 (global-set-key (kbd "<f10>")
                 'iwb)
 
-(global-set-key (kbd "C-<f5>")
+(global-set-key (kbd "<f5>")
                 'linum-mode)
+
+(global-set-key (kbd "RET")
+                'newline-and-indent)
+
+(global-set-key (kbd "C-/")
+                'comment-or-uncomment-region)
+
+(global-set-key (kbd "C-q")
+                'kill-current-buffer)
+
+(global-set-key (kbd "<f12>")
+                'indent-buffer)
+
+(global-set-key (kbd "C-S-p")
+                'smex)
 
 ;; Remove Scroll Bar
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
@@ -96,6 +122,36 @@
          ad-do-it)))))
 (smart-tabs-advice c-indent-line c-basic-offset)
 (smart-tabs-advice c-indent-region c-basic-offset)
+
+;; Theme Adjustments
+(set-default 'truncate-lines t)
+(set-face-attribute 'show-paren-match-face nil :underline t)
+(setq cursor-type 'bar)
+(setq echo-keystrokes 0.01)
+(setq frame-title-format '("%f - " user-real-login-name "@" system-name))
+(setq inhibit-startup-screen t)
+(setq show-paren-delay 0)
+(setq truncate-partial-width-windows nil)
+(blink-cursor-mode t)
+(column-number-mode t)
+(global-hl-line-mode t)
+(menu-bar-mode -1)
+(scroll-bar-mode -1)
+(show-paren-mode t)
+(tool-bar-mode -1)
+(which-function-mode t)
+(setq ido-create-new-buffer 'always)
+(setq ido-everywhere t)
+(setq ido-ignore-extensions t)
+(setq ido-use-filename-at-point 'guess)
+(setq ido-auto-merge-work-directories-length nil)
+(setq ido-enable-prefix nil)
+(setq ido-max-prospects 8)
+(setq ido-use-filename-at-point 'guess)
+(setq ido-enable-flex-matching t)
+(ido-mode t)
+(ido-ubiquitous t)
+(smex-initialize)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Personal Configuration
