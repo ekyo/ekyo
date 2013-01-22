@@ -1,0 +1,18 @@
+cd ~
+mkdir .ssh
+sudo apt-get install pssh
+
+cd .ssh
+touch authorized_keys2
+chmod 600 authorized_keys2
+# Add Workplace Key
+echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDS/JgLr97QIflsbZHkeC1/0c00aN+PaGIGue8qIK+ZUxR/yI586EvHFZqJj29JAXxbYygpwBlgYNEK51B855Flw6hEn/4DeL0+++brUSQxaH5j5WAadYjAgh4wmPSQd8zm8wnlqt+7rZShZMjWA1PCLJ/ooR0pwI3MW7BRbJGZ+dnZn4mkbQbpnsHwdOmhLWV3B8OU+ErqRwlKFrWvS+xgyWH7RVInEIv1Ei/TZRmYzlfcK/IRHx657P9HafI3UI71KDIL+YBbPgC3TxyhtnXlr15ehk0M44lZ2jHQ9NpETLXGO7n18Az1htuStfmTF/UwU9PbtwGAKTXgKmBQeQ9v ekyo@ekyo-VirtualBox
+" >> authorized_keys2
+
+# Add Tower Key
+echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDHVp6zsI8rKdZqzijmUtMoViq37TRvUopRKCKzT73j8NTDuN7Jf84ZpD4Gh5lombuAL+Lpdhg9tMeHpu+UDEoKPr/wPOguw2P5y6djVVbYZsIf5bd6U2MRXk36tGuhe/d5qkLnnNh4kCrSbzGcx/l6XDys4GYNTTYgnzk+1VUoSS5f2FG0IDLDTXuRa522ZhMMvgtZO08aeiH/f6AkkpPgsil/yA2QSrxYueNg4s4SFK/ZfCSVG8pMtGMl5fByOZmCgS+57VQlqK6VBgpjrQzvPHTqxHMTCLmo0CBBC7Xqxa9Ci/C3Ir38IgFi4ECyrTtFvSLy1QzBWsd8YnF8zV6Z ekyo@vm-server-ekyo
+" >> authorized_keys2
+
+# Add Laptop Key
+echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDgPTHX061trbfz+gs843+72rlnWpb9MNaBLG4xX9tpVGOtdqHAEpzRfepcl32VZAWnlidyz6f7Y7OjyVqPWm/sbSWXPu0+S8ri3L9w2vXGo9V1P9Le7IcLTMvXV6wm5L9nuyGCyCD2gGQqMxZliNQg8lrrQMWKCkxbHRW+AhWq/czLCSUURcQJc+bum33hJZRK4CgX1PzA+JmhGIGsZlD/MG/yDe25pvj7+mSBWN3J6kZqM3prm8MaR3mheR53STCIUMIy+Igd9Dll2cCUg5HLou9GS6QLozJyqyC+PyolMmbnbfQFfLmOgdZEiQkF3bDtvTKtXCF19fwOmPKDVCGl ekyo@ekyo-laptop-ubuntu
+" >> authorized_keys2
