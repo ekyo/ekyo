@@ -22,6 +22,16 @@
 (define-key global-map "\C-ca" 'org-agenda)
 (setq org-log-done t)
 
+;; Auto-complete
+(define-globalized-minor-mode real-global-auto-complete-mode
+  auto-complete-mode (lambda ()
+                       (if (not (minibufferp (current-buffer)))
+                           (auto-complete-mode 1)
+                         (ac-flyspell-workaround))
+                       ))
+(require 'auto-complete)
+(real-global-auto-complete-mode t)
+
 (defun full-screen-toggle ()
   "toggle full-screen mode"
   (interactive)
