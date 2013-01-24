@@ -31,6 +31,7 @@
                        ))
 (require 'auto-complete)
 (real-global-auto-complete-mode t)
+(setq ac-auto-show-menu 0.1)
 
 (defun full-screen-toggle ()
   "toggle full-screen mode"
@@ -95,7 +96,7 @@
 ;; Remove Scroll Bar
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 
-;; Automate align
+;; Auto format
 (setq-default tab-width 2) ; or any other preferred value
 (setq cua-auto-tabify-rectangles nil)
 (defadvice align (around smart-tabs activate)
