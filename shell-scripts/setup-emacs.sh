@@ -18,12 +18,4 @@ rm emacs-24.1.tar.gz
 curl -L https://github.com/bbatsov/prelude/raw/master/utils/installer.sh | sh
 
 echo "Emacs Installation Will Complete Upon Executing Emacs"
-echo "The Following Packages Must Still Be Installed Manually*:"
-echo "  - thesaurus"
-echo "  - auto-complete"
-echo "  - smart-tabs-mode"
-echo "  - ido-ubiquitous"
-echo "  - smex"
-echo "  - yasnippet"
-echo "* by using 'M-x package-list-packages' in emacs"
-echo "select packages to install with i and install with x"
+echo "Run it once for prelude, then copy that awesome config"

@@ -1,3 +1,31 @@
+;; Install required packages
+(defvar prelude-packages
+  '(ack-and-a-half auctex auto-complete clojure-mode coffee-mode deft
+                   expand-region gist groovy-mode haml-mode haskell-mode
+                   ido-ubiquitous inf-ruby magit magithub markdown-mode
+                   paredit projectile python rainbow-mode sass-mode smart
+                   smex-tabs-mode scss-mode solarized-theme thesaurus
+                   volatile-highlights yaml-mode yari yasnippet zenburn-theme
+                   )
+  "A list of packages to ensure are installed at launch.")
+
+(defun prelude-packages-installed-p ()
+  (loop for p in prelude-packages
+        when (not (package-installed-p p)) do (return nil)
+        finally (return t)))
+
+(unless (prelude-packages-installed-p)
+  ;; check for new packages (package versions)
+  (message "%s" "Emacs Prelude is now refreshing its package database...")
+  (package-refresh-contents)
+  (message "%s" " done.")
+  ;; install the missing packages
+  (dolist (p prelude-packages)
+    (when (not (package-installed-p p))
+      (package-install p))))
+
+(provide 'prelude-packages)
+
 (setq standard-indent 2)
 
 ;; ========== Place Backup Files in Specific Directory ==========
