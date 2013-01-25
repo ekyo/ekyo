@@ -121,6 +121,9 @@
 (global-set-key (kbd "C-S-p")
                 'smex)
 
+(global-set-key (kbd "C-c C-s")
+                'shell)
+
 ;; Remove Scroll Bar
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 
@@ -197,3 +200,91 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (setq user-mail-address          "ekyo777@gmail.com")
 (setq user-full-name             "Simon Kerouack")
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Skeletons
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun insert-d-header ()
+  ;; Insert a comment at the cursor position
+  (interactive)
+  (insert
+   "/**
+   Copyright: © 2012 Simon Kérouack.
+   License: Subject to the terms of the MIT license, as written in the included LICENSE.txt file.
+   Authors: Simon Kérouack
+*/
+")
+  (end-of-line))
+
+(defun insert-lodni-service-boilerplate ()
+  ;; Insert boilerplate for a Lodni Service
+  (interactive
+   (let ((name (read-string "Name: " nil 'my-history)))
+     (insert-d-header)
+     (insert "
+module service.")
+     (insert name)
+     (insert ";
+import core.service;
+
+class ")
+     (insert (capitalize name))
+     (insert "Service : Service {
+  mixin ServiceMixin;
+
+  public {
+    void setup(Config conf) {
+  }
+
+  void init() {
+    super.init();
+  }
+}
+
+class ")
+     (insert (capitalize name))
+     (insert "ServiceTest : ServiceTest!")
+     (insert (capitalize name))
+     (insert "Service {
+  mixin TestMixin;
+}
+")
+     (end-of-line))
+   ))
+
+(defun insert-lodni-plugin-boilerplate ()
+  ;; Insert boilerplate for a Lodni Plugin
+  (interactive
+   (let ((name (read-string "Name: " nil 'my-history)))
+     (insert-d-header)
+     (insert "
+module plugin.")
+     (insert name)
+     (insert ";
+import core.plugin;
+
+class ")
+     (insert (capitalize name))
+     (insert "Plugin : Plugin {
+  mixin PluginMixin;
+
+  public {
+    void setup(Config conf) {
+  }
+
+  void init() {
+    super.init();
+  }
+}
+
+class ")
+     (insert (capitalize name))
+     (insert "PluginTest : PluginTest!")
+     (insert (capitalize name))
+     (insert "Plugin {
+  mixin TestMixin;
+}
+")
+     (end-of-line))
+   ))
