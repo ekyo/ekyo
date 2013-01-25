@@ -199,7 +199,7 @@
 ;; Personal Configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (setq user-mail-address          "ekyo777@gmail.com")
-(setq user-full-name             "Simon Kerouack")
+(setq user-full-name             "Simon Kérouack")
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -208,29 +208,25 @@
 (defun insert-d-header ()
   ;; Insert a comment at the cursor position
   (interactive)
-  (insert
-   "/**
-   Copyright: © 2012 Simon Kérouack.
+  (insert (format "/**
+   Copyright: © 2012 %s.
    License: Subject to the terms of the MIT license, as written in the included LICENSE.txt file.
-   Authors: Simon Kérouack
+   Authors: %s
 */
-")
+" user-full-name user-full-name))
   (end-of-line))
 
 (defun insert-lodni-service-boilerplate ()
   ;; Insert boilerplate for a Lodni Service
   (interactive
    (let ((name (read-string "Name: " nil 'my-history)))
+     (defvar Name (capitalize name))
      (insert-d-header)
-     (insert "
-module service.")
-     (insert name)
-     (insert ";
+     (insert (format "
+module service.%s;
 import core.service;
 
-class ")
-     (insert (capitalize name))
-     (insert "Service : Service {
+class %sService : Service {
   mixin ServiceMixin;
 
   public {
@@ -242,14 +238,10 @@ class ")
   }
 }
 
-class ")
-     (insert (capitalize name))
-     (insert "ServiceTest : ServiceTest!")
-     (insert (capitalize name))
-     (insert "Service {
+class %sServiceTest : ServiceTest!%sService {
   mixin TestMixin;
 }
-")
+" name Name Name Name))
      (end-of-line))
    ))
 
@@ -257,16 +249,13 @@ class ")
   ;; Insert boilerplate for a Lodni Plugin
   (interactive
    (let ((name (read-string "Name: " nil 'my-history)))
-     (insert-d-header)
-     (insert "
-module plugin.")
-     (insert name)
-     (insert ";
+     (defvar Name (capitalize name)
+       (insert-d-header)
+       (insert (format "
+module plugin.%s;
 import core.plugin;
 
-class ")
-     (insert (capitalize name))
-     (insert "Plugin : Plugin {
+class %sPlugin : Plugin {
   mixin PluginMixin;
 
   public {
@@ -278,13 +267,9 @@ class ")
   }
 }
 
-class ")
-     (insert (capitalize name))
-     (insert "PluginTest : PluginTest!")
-     (insert (capitalize name))
-     (insert "Plugin {
+class %sPluginTest : PluginTest!%sPlugin {
   mixin TestMixin;
 }
-")
-     (end-of-line))
+" name Name Name Name))
+       (end-of-line)))
    ))
