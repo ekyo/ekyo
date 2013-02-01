@@ -26,6 +26,6 @@ echo 'alias goscript="cd ~/Dropbox/ekyo/shell-scripts"' >> .zshrc
 echo 'alias goekyo="cd ~/Dropbox/ekyo-private/server"' >> .zshrc
 echo 'alias godrop="cd ~/Dropbox"' >> .zshrc
 echo 'alias myip="curl -s http://checkrealip.com/ | grep \"Current IP Address\""' >> .zshrc
-echo 'alias myip="curl ifconfig.me"' >> .zshrc
+echo 'alias myip2="curl ifconfig.me"' >> .zshrc
 echo 'alias ping="mtr"' >> .zshrc
 echo 'alias vim="emacs"' >> .zshrc

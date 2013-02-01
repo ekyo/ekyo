@@ -1,11 +1,21 @@
 ;; Install required packages
 (defvar prelude-packages
-  '(ack-and-a-half auctex auto-complete clojure-mode coffee-mode deft
-                   expand-region gist groovy-mode haml-mode haskell-mode
-                   ido-ubiquitous inf-ruby magit magithub markdown-mode
-                   paredit projectile python rainbow-mode sass-mode smart
-                   smex-tabs-mode scss-mode solarized-theme thesaurus
-                   volatile-highlights yaml-mode yari yasnippet zenburn-theme
+  '(ack-and-a-half auctex auto-complete
+                   clojure-mode coffee-mode
+                   deft
+                   expand-region
+                   gist groovy-mode
+                   haml-mode haskell-mode
+                   ido-ubiquitous inf-ruby
+                   magit magithub markdown-mode
+                   paredit projectile python
+                   rainbow-mode
+                   sass-mode smart-tabs-mode smex scss-mode
+                   solarized-theme
+                   thesaurus
+                   volatile-highlights
+                   yaml-mode yari yasnippet
+                   zenburn-theme
                    )
   "A list of packages to ensure are installed at launch.")
 
@@ -88,6 +98,47 @@
 (eval-after-load "thesaurus"
   '(progn (setq thesaurus-bhl-api-key "699761ef74acd451675d335fa614f48e")))
 
+;; Use C-j to run a shell command in a shell buffer.
+(defun sh-send-line-or-region (&optional step)
+  (interactive ())
+  (let ((proc (get-process "shell"))
+        pbuf min max command)
+    (unless proc
+      (let ((currbuff (current-buffer)))
+        (shell)
+        (switch-to-buffer currbuff)
+        (setq proc (get-process "shell"))
+        ))
+    (setq pbuff (process-buffer proc))
+    (if (use-region-p)
+        (setq min (region-beginning)
+              max (region-end))
+      (setq min (point-at-bol)
+            max (point-at-eol)))
+    (setq command (concat (buffer-substring min max) "\n"))
+    (with-current-buffer pbuff
+      (goto-char (process-mark proc))
+      (insert command)
+      (move-marker (process-mark proc) (point))
+      ) ;;pop-to-buffer does not work with save-current-buffer -- bug?
+    (process-send-string  proc command)
+    (display-buffer (process-buffer proc) t)
+    (when step
+      (goto-char max)
+      (next-line))
+    ))
+
+(defun sh-send-line-or-region-and-step ()
+  (interactive)
+  (sh-send-line-or-region t))
+(defun sh-switch-to-process-buffer ()
+  (interactive)
+  (pop-to-buffer (process-buffer (get-process "shell")) t))
+
+(define-key sh-mode-map [(control ?j)] 'sh-send-line-or-region-and-step)
+(define-key sh-mode-map [(control ?c) (control ?z)] 'sh-switch-to-process-buffer)
+
+
 (global-set-key (kbd "C-z")
                 'undo)
 
@@ -112,7 +163,7 @@
 (global-set-key (kbd "C-/")
                 'comment-or-uncomment-region)
 
-(global-set-key (kbd "C-q")
+(global-set-key (kbd "C-c q")
                 'kill-current-buffer)
 
 (global-set-key (kbd "<f12>")
@@ -209,11 +260,11 @@
   ;; Insert a comment at the cursor position
   (interactive)
   (insert (format "/**
-   Copyright: © 2012 %s.
+   Copyright: © %s %s.
    License: Subject to the terms of the MIT license, as written in the included LICENSE.txt file.
    Authors: %s
 */
-" user-full-name user-full-name))
+" (format-time-string "%Y") user-full-name user-full-name))
   (end-of-line))
 
 (defun insert-lodni-service-boilerplate ()
