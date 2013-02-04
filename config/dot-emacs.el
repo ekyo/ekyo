@@ -1,4 +1,6 @@
-;; Install required packages
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Ensure required packages are installed
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defvar prelude-packages
   '(ack-and-a-half auctex auto-complete
                    clojure-mode coffee-mode
@@ -36,9 +38,10 @@
 
 (provide 'prelude-packages)
 
-(setq standard-indent 2)
 
-;; ========== Place Backup Files in Specific Directory ==========
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Place Backup Files in Specific Directory
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (push "/usr/bin" exec-path)
 ;; Enable backup files.
 (setq make-backup-files t)
@@ -47,6 +50,10 @@
 ;; Save all backup file in this directory.
 (setq backup-directory-alist (quote ((".*" . "~/.emacs_backups/"))))
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Smooth scrolling
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (setq ;; scrolling
  scroll-margin 0                        ;; do smooth scrolling, ...
  scroll-conservatively 100000           ;; ... the defaults ...
@@ -54,13 +61,19 @@
  scroll-down-aggressively 0             ;; ... annoying
  scroll-preserve-screen-position t)     ;; preserve screen pos with C-v/M-v
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Org-mode hooks
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'org-install)
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
-(define-key global-map "\C-cl" 'org-store-link)
-(define-key global-map "\C-ca" 'org-agenda)
+(define-key global-map (kbd "C-c l") 'org-store-link)
+(define-key global-map (kbd "C-c a") 'org-agenda)
 (setq org-log-done t)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Auto-complete
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Enable everywhere
 (define-globalized-minor-mode real-global-auto-complete-mode
   auto-complete-mode (lambda ()
                        (if (not (minibufferp (current-buffer)))
@@ -69,13 +82,23 @@
                        ))
 (require 'auto-complete)
 (real-global-auto-complete-mode t)
+;; delay before showing up
 (setq ac-auto-show-menu 0.1)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Full Screen (require 'wmctrl' installed)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun full-screen-toggle ()
   "toggle full-screen mode"
   (interactive)
   (shell-command "wmctrl -r :ACTIVE: -btoggle,fullscreen"))
 
+(global-set-key (kbd "<f11>")
+                'full-screen-toggle)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Indentation Hacks
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun iwb ()
   "indent whole buffer"
   (interactive)
@@ -89,16 +112,76 @@
   (save-excursion
     (indent-region (point-min) (point-max) nil)))
 
+(global-set-key (kbd "<f10>")
+                'iwb)
+
+;; Using smart-tabs
+(setq standard-indent 2)
+(setq-default tab-width 2) ; or any other preferred value
+(setq cua-auto-tabify-rectangles nil)
+(defadvice align (around smart-tabs activate)
+  (let ((indent-tabs-mode nil)) ad-do-it))
+(defadvice align-regexp (around smart-tabs activate)
+  (let ((indent-tabs-mode nil)) ad-do-it))
+(defadvice indent-relative (around smart-tabs activate)
+  (let ((indent-tabs-mode nil)) ad-do-it))
+(defadvice indent-according-to-mode (around smart-tabs activate)
+  (let ((indent-tabs-mode indent-tabs-mode))
+    (if (memq indent-line-function
+              '(indent-relative
+                indent-relative-maybe))
+        (setq indent-tabs-mode nil))
+    ad-do-it))
+(defmacro smart-tabs-advice (function offset)
+  `(progn
+     (defvaralias ',offset 'tab-width)
+     (defadvice ,function (around smart-tabs activate)
+       (cond
+        (indent-tabs-mode
+         (save-excursion
+           (beginning-of-line)
+           (while (looking-at "\t*\\( +\\)\t+")
+             (replace-match "" nil nil nil 1)))
+         (setq tab-width tab-width)
+         (let ((tab-width fill-column)
+               (,offset fill-column)
+               (wstart (window-start)))
+           (unwind-protect
+               (progn ad-do-it)
+             (set-window-start (selected-window) wstart))))
+        (t
+         ad-do-it)))))
+(smart-tabs-advice c-indent-line c-basic-offset)
+(smart-tabs-advice c-indent-region c-basic-offset)
+
+(global-set-key (kbd "<f12>")
+                'indent-buffer)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Kill current buffer
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun kill-current-buffer ()
   "Kills the current buffer."
   (interactive)
   (kill-buffer (current-buffer)))
 
+(global-set-key (kbd "C-c q")
+                'kill-current-buffer)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Thesaurus configuration
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Set Thesaurus Key
 (eval-after-load "thesaurus"
   '(progn (setq thesaurus-bhl-api-key "699761ef74acd451675d335fa614f48e")))
 
-;; Use C-j to run a shell command in a shell buffer.
+(global-set-key (kbd "C-x t")
+                'thesaurus-choose-synonym-and-replace)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Shell-script hooks
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; run a shell command in a shell buffer.
 (defun sh-send-line-or-region (&optional step)
   (interactive ())
   (let ((proc (get-process "shell"))
@@ -137,26 +220,19 @@
 
 (eval-after-load "sh-script"
   '(progn
-    (define-key sh-mode-map (kbd "C-j") 'sh-send-line-or-region-and-step)
-    (define-key sh-mode-map (kbd "C-c C-z") 'sh-switch-to-process-buffer)
-    ))
+     (define-key sh-mode-map (kbd "C-j") 'sh-send-line-or-region-and-step)
+     (define-key sh-mode-map (kbd "C-c C-z") 'sh-switch-to-process-buffer)
+     ))
 
 
-
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Global Key Mappings
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (global-set-key (kbd "C-z")
                 'undo)
 
-(global-set-key (kbd "C-x t")
-                'thesaurus-choose-synonym-and-replace)
-
 (global-set-key (kbd "C-g")
                 'goto-line)
-
-(global-set-key (kbd "<f11>")
-                'full-screen-toggle)
-
-(global-set-key (kbd "<f10>")
-                'iwb)
 
 (global-set-key (kbd "<f5>")
                 'linum-mode)
@@ -167,60 +243,19 @@
 (global-set-key (kbd "C-/")
                 'comment-or-uncomment-region)
 
-(global-set-key (kbd "C-c q")
-                'kill-current-buffer)
-
-(global-set-key (kbd "<f12>")
-                'indent-buffer)
-
 (global-set-key (kbd "C-S-p")
                 'smex)
 
 (global-set-key (kbd "C-c C-s")
                 'shell)
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Theme Adjustments
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Remove Scroll Bar
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
-
-;; Auto format
-(setq-default tab-width 2) ; or any other preferred value
-(setq cua-auto-tabify-rectangles nil)
-(defadvice align (around smart-tabs activate)
-  (let ((indent-tabs-mode nil)) ad-do-it))
-(defadvice align-regexp (around smart-tabs activate)
-  (let ((indent-tabs-mode nil)) ad-do-it))
-(defadvice indent-relative (around smart-tabs activate)
-  (let ((indent-tabs-mode nil)) ad-do-it))
-(defadvice indent-according-to-mode (around smart-tabs activate)
-  (let ((indent-tabs-mode indent-tabs-mode))
-    (if (memq indent-line-function
-              '(indent-relative
-                indent-relative-maybe))
-        (setq indent-tabs-mode nil))
-    ad-do-it))
-(defmacro smart-tabs-advice (function offset)
-  `(progn
-     (defvaralias ',offset 'tab-width)
-     (defadvice ,function (around smart-tabs activate)
-       (cond
-        (indent-tabs-mode
-         (save-excursion
-           (beginning-of-line)
-           (while (looking-at "\t*\\( +\\)\t+")
-             (replace-match "" nil nil nil 1)))
-         (setq tab-width tab-width)
-         (let ((tab-width fill-column)
-               (,offset fill-column)
-               (wstart (window-start)))
-           (unwind-protect
-               (progn ad-do-it)
-             (set-window-start (selected-window) wstart))))
-        (t
-         ad-do-it)))))
-(smart-tabs-advice c-indent-line c-basic-offset)
-(smart-tabs-advice c-indent-region c-basic-offset)
-
-;; Theme Adjustments
+;;
 (set-default 'truncate-lines t)
 (set-face-attribute 'show-paren-match-face nil :underline t)
 (setq cursor-type 'bar)
