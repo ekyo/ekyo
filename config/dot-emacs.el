@@ -135,8 +135,12 @@
   (interactive)
   (pop-to-buffer (process-buffer (get-process "shell")) t))
 
-(define-key sh-mode-map [(control ?j)] 'sh-send-line-or-region-and-step)
-(define-key sh-mode-map [(control ?c) (control ?z)] 'sh-switch-to-process-buffer)
+(eval-after-load "sh-script"
+  '(progn
+    (define-key sh-mode-map (kbd "C-j") 'sh-send-line-or-region-and-step)
+    (define-key sh-mode-map (kbd "C-c C-z") 'sh-switch-to-process-buffer)
+    ))
+
 
 
 (global-set-key (kbd "C-z")
