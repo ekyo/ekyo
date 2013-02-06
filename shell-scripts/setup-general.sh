@@ -8,3 +8,5 @@ sudo apt-get install -y \
     dmd ruby make scons g++ libboost-all-dev python coffeescript \
     git meld \
     pidgin pidgin-skype chromium-browser openssh-server
+
+sudo pip install howdoi

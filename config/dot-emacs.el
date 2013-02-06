@@ -224,6 +224,18 @@
      (define-key sh-mode-map (kbd "C-c C-z") 'sh-switch-to-process-buffer)
      ))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Howdoi inside emacs
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun howdoi ()
+  (interactive
+   (let ((args (read-string "howdoi: " nil 'my-history)))
+     (async-shell-command (concat "howdoi " args))
+     )))
+
+(global-set-key (kbd "C-c C-h")
+                'howdoi)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Global Key Mappings
