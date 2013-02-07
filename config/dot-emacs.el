@@ -268,14 +268,14 @@
 ;; Remove Scroll Bar
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 ;;
-(set-default 'truncate-lines t)
+(set-default 'truncate-lines nil)
+(setq truncate-partial-width-windows nil)
 (set-face-attribute 'show-paren-match-face nil :underline t)
 (setq cursor-type 'bar)
 (setq echo-keystrokes 0.01)
 (setq frame-title-format '("%f - " user-real-login-name "@" system-name))
 (setq inhibit-startup-screen t)
 (setq show-paren-delay 0)
-(setq truncate-partial-width-windows nil)
 (blink-cursor-mode t)
 (column-number-mode t)
 (global-hl-line-mode t)
