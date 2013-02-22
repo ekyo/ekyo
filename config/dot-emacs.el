@@ -265,6 +265,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Theme Adjustments
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Color
+(color-theme-sanityinc-tomorrow-night)
+;(color-theme-monokai)
 ;; Remove Scroll Bar
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 ;;
