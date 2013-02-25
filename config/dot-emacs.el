@@ -259,17 +259,32 @@
 (global-set-key (kbd "C-c C-h")
                 'howdoi)
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Only enable linum-mode during goto-line
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun goto-line-with-feedback ()
+  "Show line numbers temporarily, while prompting for the line number input"
+  (interactive)
+  (unwind-protect
+      (progn
+        (linum-mode 1)
+        (goto-line (read-number "Goto line: ")))
+    (linum-mode -1)))
+
+(global-set-key (kbd "C-g")
+                'goto-line-with-feedback)
+;(global-set-key [remap goto-line] 'goto-line-with-feedback)
+
+(global-set-key (kbd "<f5>")
+                'linum-mode)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Global Key Mappings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (global-set-key (kbd "C-z")
                 'undo)
 
-(global-set-key (kbd "C-g")
-                'goto-line)
-
-(global-set-key (kbd "<f5>")
-                'linum-mode)
 
 (global-set-key (kbd "RET")
                 'newline-and-indent)
