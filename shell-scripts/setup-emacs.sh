@@ -3,7 +3,7 @@ sudo apt-get install -y \
     texinfo texlive \
     libxpm-dev libjpeg-dev libgif-dev libtiff4-dev libgtk2.0-dev \
     libncurses-dev libncurses5-dev \
-    aspell ack wmctrl
+    aspell ack wmctrl fonts-inconsolata
 wget http://ftp.gnu.org/pub/gnu/emacs/emacs-24.1.tar.gz
 tar -xzf emacs-24.1.tar.gz
 cd emacs-24.1

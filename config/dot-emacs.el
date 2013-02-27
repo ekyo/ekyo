@@ -17,7 +17,6 @@
                    thesaurus
                    volatile-highlights
                    yaml-mode yari yasnippet
-                   zenburn-theme
                    )
   "A list of packages to ensure are installed at launch.")
 
@@ -336,6 +335,9 @@
 (ido-mode t)
 (ido-ubiquitous t)
 (smex-initialize)
+
+(set-default-font
+ "-unknown-Inconsolata-normal-normal-normal-*-*-*-*-*-m-0-iso10646-1")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Personal Configuration
