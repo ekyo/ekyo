@@ -31,6 +31,10 @@ echo 'alias myip2="curl ifconfig.me"' >> .zshrc
 echo 'alias ping="mtr"' >> .zshrc
 echo 'alias vim="emacs"' >> .zshrc
 
+echo 'lt() { ls -ltrsa "$@" | tail ; }' >> .zshrc
+echo 'psgrep() { ps axuf | grep -v grep | grep "$@" -i --color=auto ; }' >> .zshrc
+echo 'fname() { find . -iname "*$@*" ; }' >> .zshrc
+
 echo '
 if [[ $INSIDE_EMACS != "" ]]; then
     stty -echo
