@@ -3,6 +3,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defvar prelude-packages
   '(ack-and-a-half auctex auto-complete
+                   buffer-move
                    clojure-mode coffee-mode
                    deft
                    expand-region
