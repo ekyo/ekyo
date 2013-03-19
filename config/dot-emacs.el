@@ -283,7 +283,7 @@
 ;; Global Key Mappings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (global-set-key (kbd "C-z")
-                'undo)
+                'undo-tree-visualize)
 
 
 (global-set-key (kbd "RET")
@@ -339,6 +339,9 @@
 
 (set-default-font
  "-unknown-Inconsolata-normal-normal-normal-*-*-*-*-*-m-0-iso10646-1")
+
+;; Remove comment from scratch
+(setq initial-scratch-message nil)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Personal Configuration
