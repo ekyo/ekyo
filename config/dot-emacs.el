@@ -1,43 +1,93 @@
+;;; dot-emacs.el --- Ekyo's configuration;;;
+
+;; Copyright (c) 2012, 2013 Simon Kérouack <ekyo777@gmail.com>
+;;
+;; Author: Simon Kérouack <ekyo777@gmail.com>
+;; URL: https://github.com/ekyo/ekyo
+
+;; This file is not part of GNU Emacs.
+
+;; This program is free software: you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+;;; Commentary:
+
+;; Configuration I use on a daily basis.  Use whatever you like.
+
+;;; Code:
+
+(eval-when-compile (require 'cl))
+
+(defvar *emacs-load-start* (current-time))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Ensure required packages are installed
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defvar prelude-packages
-  '(ack-and-a-half auctex auto-complete
-                   buffer-move
-                   clojure-mode coffee-mode
-                   deft
-                   expand-region
-                   gist groovy-mode
-                   haml-mode haskell-mode
-                   ido-ubiquitous inf-ruby
-                   magit magithub markdown-mode
-                   paredit projectile python
-                   rainbow-mode
-                   sass-mode smart-tabs-mode smex scss-mode
-                   solarized-theme
-                   thesaurus
-                   volatile-highlights
-                   yaml-mode yari yasnippet
-                   )
+(add-to-list 'package-archives
+             '("marmalade" . "http://marmalade-repo.org/packages/") t)
+
+(defvar ekyo-packages
+  '(ack-and-a-half
+    auto-complete
+    buffer-move
+    clojure-mode
+    coffee-mode
+    color-theme-monokai
+    color-theme-sanityinc-tomorrow
+    deft
+    diminish
+    expand-region
+    gist
+    groovy-mode
+    haml-mode
+    haskell-mode
+    helm
+    helm-projectile
+    ido-ubiquitous
+    inf-ruby
+    magit
+    magithub
+    markdown-mode
+    paredit
+    powerline
+    projectile
+    python
+    rainbow-mode
+    sass-mode
+    smart-tabs-mode
+    smex
+    scss-mode
+    thesaurus
+    volatile-highlights
+    yaml-mode
+    yari
+    yasnippet
+    )
   "A list of packages to ensure are installed at launch.")
 
-(defun prelude-packages-installed-p ()
-  (loop for p in prelude-packages
-        when (not (package-installed-p p)) do (return nil)
-        finally (return t)))
+(message "%s" "Emacs Prelude is now refreshing its package database...")
+(package-refresh-contents)
+(message "%s" " done.")
 
-(unless (prelude-packages-installed-p)
-  ;; check for new packages (package versions)
-  (message "%s" "Emacs Prelude is now refreshing its package database...")
-  (package-refresh-contents)
-  (message "%s" " done.")
-  ;; install the missing packages
-  (dolist (p prelude-packages)
-    (when (not (package-installed-p p))
-      (package-install p))))
+;; install the missing packages
+(dolist (p ekyo-packages)
+  (when (not (require p nil t))
+    (message "installing %s" p)
+    (package-install p)
+    )
+  )
 
-(provide 'prelude-packages)
-
+(provide 'ekyo-packages)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Place Backup Files in Specific Directory
