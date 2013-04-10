@@ -123,6 +123,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Auto-complete
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(require 'auto-complete)
 ;; Enable everywhere
 (define-globalized-minor-mode real-global-auto-complete-mode
   auto-complete-mode (lambda ()
@@ -130,7 +132,6 @@
                            (auto-complete-mode 1)
                          (ac-flyspell-workaround))
                        ))
-(require 'auto-complete)
 (real-global-auto-complete-mode t)
 ;; delay before showing up
 (setq ac-auto-show-menu 0.1)
