@@ -147,6 +147,9 @@
 (global-set-key (kbd "<f11>")
                 'full-screen-toggle)
 
+;; Full screen after load
+(shell-command "wmctrl -r :ACTIVE: -badd,fullscreen")
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Rename current buffer file
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
