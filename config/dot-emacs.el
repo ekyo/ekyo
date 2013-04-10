@@ -47,6 +47,8 @@
     deft
     diminish
     expand-region
+    flymake-coffee
+    flymake-json
     gist
     groovy-mode
     haml-mode
@@ -439,6 +441,14 @@
 ;; (diminish2 'volatile-highlights-mode "volatile-highlights")
 ;; (diminish2 'whitespace-mode "whitespace" " ☠")
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Flymake Configuration
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(require 'flymake-coffee)
+(add-hook 'coffee-mode-hook 'flymake-coffee-load)
+
+(require 'flymake-json)
+(add-hook 'js-mode-hook 'flymake-json-maybe-load)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Personal Configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
