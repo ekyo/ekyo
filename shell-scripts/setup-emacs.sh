@@ -7,7 +7,7 @@ sudo apt-get install -y \
 
 sudo add-apt-repository ppa:cassou/emacs
 sudo apt-get update
-sudo apt-get install -y emacs24 emacs24-el emacs24-common-non-dfsg
+sudo apt-get install -y emacs24 emacs24-el emacs24-common-non-dfsg emacs-goodies-el
 
 # Prelude Extension
 curl -L https://github.com/bbatsov/prelude/raw/master/utils/installer.sh | sh
