@@ -367,13 +367,13 @@
 (global-set-key (kbd "C-c C-s")
                 'shell)
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Theme Adjustments
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ;; Color
 (color-theme-sanityinc-tomorrow-night)
-;(color-theme-monokai)
+(color-theme-monokai)
 ;; Remove Scroll Bar
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 ;;
@@ -413,11 +413,37 @@
 (setq initial-scratch-message nil)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Mode line configuration
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; (defun diminish2 (mode feature &optional to-what)
+;;   "MODE, FEATURE, TO-WHAT."
+;;   (message "dminish2 %s" mode)
+;;   (eval-after-load feature '(diminish mode to-what)))
+
+;; (defun diminish1 (mode &optional to-what)
+;;   "MODE TO-WHAT."
+;;   (message "diminish1 %s" mode)
+;;   (diminish2 mode (symbol-name mode) to-what))
+
+;; (diminish2 'auto-complete-mode "auto-complete" " ☯")
+;; (diminish2 'paredit-mode "paredit"             " ☂")
+;; (diminish2 'projectile-mode "projectile"       " ⚑")
+;; (diminish2 'undo-tree-mode "undo-tree"         " ᚠ")
+;; (diminish2 'yas-minor-mode "yasnippet"         " ⌨")
+
+;; (diminish  'eldoc-mode " ✦")
+;; (diminish2 'elisp-slime-nav-mode "elisp-slime-nav")
+;; (diminish1 'prelude-mode)
+;; (diminish1 'rainbow-mode)
+;; (diminish2 'volatile-highlights-mode "volatile-highlights")
+;; (diminish2 'whitespace-mode "whitespace" " ☠")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Personal Configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (setq user-mail-address          "ekyo777@gmail.com")
 (setq user-full-name             "Simon Kérouack")
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Skeletons
