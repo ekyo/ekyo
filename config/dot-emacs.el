@@ -516,3 +516,12 @@ class %sPluginTest : PluginTest!%sPlugin {
 " name Name Name Name))
        (end-of-line)))
    ))
+
+;; Profile .emacs load time
+(message ".emacs loaded in %ds"
+         (destructuring-bind (hi lo ms) (current-time)
+           (- (+ hi lo) (+ (first *emacs-load-start*)
+                           (second *emacs-load-start*)))))
+
+(provide 'dot-emacs)
+;;; dot-emacs.el ends here
