@@ -81,13 +81,14 @@
 (package-refresh-contents)
 (message "%s" " done.")
 
+(defun package-require (pkg)
+  "Install a package only if it's not already installed."
+  (when (not (package-installed-p pkg))
+    (package-install pkg)))
+
 ;; install the missing packages
 (dolist (p ekyo-packages)
-  (when (not (require p nil t))
-    (message "installing %s" p)
-    (package-install p)
-    )
-  )
+  (package-require p))
 
 (provide 'ekyo-packages)
 
@@ -150,7 +151,7 @@
                 'full-screen-toggle)
 
 ;; Full screen after load
-(shell-command "wmctrl -r :ACTIVE: -badd,fullscreen")
+;; (shell-command "wmctrl -r :ACTIVE: -badd,fullscreen")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Rename current buffer file
@@ -320,7 +321,7 @@
 ;; Only enable linum-mode during goto-line
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun goto-line-with-feedback ()
-  "Show line numbers temporarily, while prompting for the line number input"
+  "Show line numbers temporarily, while prompting for the line number input."
   (interactive)
   (unwind-protect
       (progn
@@ -374,7 +375,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Color
-(color-theme-sanityinc-tomorrow-night)
 (color-theme-monokai)
 ;; Remove Scroll Bar
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
@@ -408,6 +408,9 @@
 (ido-ubiquitous t)
 (smex-initialize)
 
+(flyspell-mode 0)
+(flyspell-prog-mode)
+
 (set-default-font
  "-unknown-Inconsolata-normal-normal-normal-*-*-*-*-*-m-0-iso10646-1")
 
@@ -418,28 +421,28 @@
 ;; Mode line configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; (defun diminish2 (mode feature &optional to-what)
-;;   "MODE, FEATURE, TO-WHAT."
-;;   (message "dminish2 %s" mode)
-;;   (eval-after-load feature '(diminish mode to-what)))
+(defun diminish2 (mode feature &optional to-what)
+  "MODE, FEATURE, TO-WHAT."
+  (message "dminish2 %s" mode)
+  (eval-after-load feature '(diminish mode to-what)))
 
-;; (defun diminish1 (mode &optional to-what)
-;;   "MODE TO-WHAT."
-;;   (message "diminish1 %s" mode)
-;;   (diminish2 mode (symbol-name mode) to-what))
+(defun diminish1 (mode &optional to-what)
+  "MODE TO-WHAT."
+  (message "diminish1 %s" mode)
+  (diminish2 mode (symbol-name mode) to-what))
 
-;; (diminish2 'auto-complete-mode "auto-complete" " ☯")
-;; (diminish2 'paredit-mode "paredit"             " ☂")
-;; (diminish2 'projectile-mode "projectile"       " ⚑")
-;; (diminish2 'undo-tree-mode "undo-tree"         " ᚠ")
-;; (diminish2 'yas-minor-mode "yasnippet"         " ⌨")
+(diminish2 'auto-complete-mode "auto-complete" " ☯")
+(diminish2 'paredit-mode "paredit"             " ☂")
+(diminish2 'projectile-mode "projectile"       " ⚑")
+(diminish2 'undo-tree-mode "undo-tree"         " ᚠ")
+(diminish2 'yas-minor-mode "yasnippet"         " ⌨")
 
-;; (diminish  'eldoc-mode " ✦")
-;; (diminish2 'elisp-slime-nav-mode "elisp-slime-nav")
-;; (diminish1 'prelude-mode)
-;; (diminish1 'rainbow-mode)
-;; (diminish2 'volatile-highlights-mode "volatile-highlights")
-;; (diminish2 'whitespace-mode "whitespace" " ☠")
+(diminish  'eldoc-mode " ✦")
+(diminish2 'elisp-slime-nav-mode "elisp-slime-nav")
+(diminish1 'prelude-mode)
+(diminish1 'rainbow-mode)
+(diminish2 'volatile-highlights-mode "volatile-highlights")
+(diminish2 'whitespace-mode "whitespace" " ☠")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Flymake Configuration
@@ -526,12 +529,6 @@ class %sPluginTest : PluginTest!%sPlugin {
 " name Name Name Name))
        (end-of-line)))
    ))
-
-;; Profile .emacs load time
-(message ".emacs loaded in %ds"
-         (destructuring-bind (hi lo ms) (current-time)
-           (- (+ hi lo) (+ (first *emacs-load-start*)
-                           (second *emacs-load-start*)))))
 
 (provide 'dot-emacs)
 ;;; dot-emacs.el ends here
