@@ -1,11 +1,10 @@
 # Install NodeJs
 cd ~
-sudo make install npm
-wget -N http://nodejs.org/dist/v0.8.9/node-latest.tar.gz
-tar xzvf node-latest.tar.gz && cd `ls -rd node-v*`
+sudo apt-get install npm -y
+wget -N http://nodejs.org/dist/v0.10.5/node-v0.10.5.tar.gz
+tar xzvf node-v0.10.5.tar.gz && cd node-v0.10.5
 ./configure
 sudo make install
-
 npm install -g coffeelint
-
+n
 cd ..

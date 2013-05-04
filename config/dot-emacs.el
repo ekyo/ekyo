@@ -20,7 +20,7 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-;;; Commentary:
+;;; Commentary:p
 
 ;; Configuration I use on a daily basis.  Use whatever you like.
 
@@ -46,8 +46,10 @@
     color-theme-sanityinc-tomorrow
     deft
     diminish
+    d-mode
     expand-region
     flymake-coffee
+    flymake-d
     flymake-json
     gist
     groovy-mode
@@ -431,18 +433,18 @@
   (message "diminish1 %s" mode)
   (diminish2 mode (symbol-name mode) to-what))
 
-(diminish2 'auto-complete-mode "auto-complete" " ☯")
-(diminish2 'paredit-mode "paredit"             " ☂")
-(diminish2 'projectile-mode "projectile"       " ⚑")
-(diminish2 'undo-tree-mode "undo-tree"         " ᚠ")
-(diminish2 'yas-minor-mode "yasnippet"         " ⌨")
+;; (diminish2 'auto-complete-mode "auto-complete" " ☯")
+;; (diminish2 'paredit-mode "paredit"             " ☂")
+;; (diminish2 'projectile-mode "projectile"       " ⚑")
+;; (diminish2 'undo-tree-mode "undo-tree"         " ᚠ")
+;; (diminish2 'yas-minor-mode "yasnippet"         " ⌨")
 
-(diminish  'eldoc-mode " ✦")
-(diminish2 'elisp-slime-nav-mode "elisp-slime-nav")
-(diminish1 'prelude-mode)
-(diminish1 'rainbow-mode)
-(diminish2 'volatile-highlights-mode "volatile-highlights")
-(diminish2 'whitespace-mode "whitespace" " ☠")
+;; (diminish  'eldoc-mode " ✦")
+;; (diminish2 'elisp-slime-nav-mode "elisp-slime-nav")
+;; (diminish1 'prelude-mode)
+;; (diminish1 'rainbow-mode)
+;; (diminish2 'volatile-highlights-mode "volatile-highlights")
+;; (diminish2 'whitespace-mode "whitespace" " ☠")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Flymake Configuration
@@ -452,6 +454,14 @@
 
 (require 'flymake-json)
 (add-hook 'js-mode-hook 'flymake-json-maybe-load)
+
+(require 'd-mode)
+(add-hook 'd-mode-hook 'flymake-d-load)
+
+(defadvice flymake-post-syntax-check (before flymake-force-check-was-interrupted)
+  (setq flymake-check-was-interrupted t))
+(ad-activate 'flymake-post-syntax-check)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Personal Configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
