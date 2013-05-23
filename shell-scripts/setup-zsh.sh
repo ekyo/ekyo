@@ -22,6 +22,9 @@ ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[blue]%})"
 ' > .oh-my-zsh/themes/robbyrussell.zsh-theme
 
 echo 'alias g="git"' >> .zshrc
+echo 'alias gp="g push"' >> .zshrc
+echo 'alias gpl="g pull --rebase origin master"' >> .zshrc
+echo 'alias gpla="g submodule foreach git pull --rebase origin master; gpl"' >> .zshrc
 echo 'alias ack="ack-grep"' >> .zshrc
 echo 'alias myip="curl -s http://checkrealip.com/ | grep \"Current IP Address\" ; ifconfig | grep \"inet addr:\""' >> .zshrc
 echo 'alias myip2="curl ifconfig.me"' >> .zshrc
