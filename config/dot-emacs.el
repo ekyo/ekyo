@@ -51,6 +51,7 @@
     flymake-coffee
     flymake-d
     flymake-json
+    flymake-yaml
     gist
     groovy-mode
     haml-mode
@@ -59,6 +60,7 @@
     helm-projectile
     ido-ubiquitous
     inf-ruby
+    linum-relative
     magit
     magithub
     markdown-mode
@@ -68,9 +70,9 @@
     python
     rainbow-mode
     sass-mode
+    scss-mode
     smart-tabs-mode
     smex
-    scss-mode
     thesaurus
     volatile-highlights
     yaml-mode
@@ -105,7 +107,6 @@
 ;; Save all backup file in this directory.
 (setq backup-directory-alist (quote ((".*" . "~/.emacs_backups/"))))
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Smooth scrolling
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -115,6 +116,12 @@
  scroll-up-aggressively 0               ;; ... are very ...
  scroll-down-aggressively 0             ;; ... annoying
  scroll-preserve-screen-position t)     ;; preserve screen pos with C-v/M-v
+
+(when (require 'sublimity nil t)
+  (sublimity-scroll))
+
+(setq sublimity-scroll-weight1 1)
+(setq sublimity-scroll-weight2 1)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Org-mode hooks
@@ -338,6 +345,9 @@
 (global-set-key (kbd "<f5>")
                 'linum-mode)
 
+(global-set-key (kbd "<f6>")
+                'linum-relative-toggle)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Undo tree
@@ -358,6 +368,12 @@
                'helm-for-files)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Haskell Mode Configuration
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(custom-set-variables
+ '(haskell-mode-hook '(turn-on-haskell-indentation)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Global Key Mappings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (global-set-key (kbd "RET")
@@ -375,9 +391,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Theme Adjustments
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; Color
-(color-theme-monokai)
+;;(color-theme-monokai)
 ;; Remove Scroll Bar
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 ;;
@@ -419,32 +433,44 @@
 ;; Remove comment from scratch
 (setq initial-scratch-message nil)
 
+;; Set font size
+(set-face-attribute 'default nil :height 100)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Mode line configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun diminish2 (mode feature &optional to-what)
-  "MODE, FEATURE, TO-WHAT."
-  (message "dminish2 %s" mode)
-  (eval-after-load feature '(diminish mode to-what)))
+(defvar mode-line-cleaner-alist
+  '((auto-complete-mode . " ☯")
+    (paredit-mode . " ☂")
+    (projectile-mode . " ⚑")
+    (undo-tree-mode . "")
+    (yas-minor-mode . " υ")
+    (emacs-lisp-mode . " EL")
+    (eldoc-mode . "")
+    (elisp-slime-nav-mode . "")
+    (prelude-mode . "")
+    (rainbow-mode . "")
+    (volatile-highlights-mode . "")
+    (whitespace-mode . " ☠")
+    (coffee-mode . "☕")))
 
-(defun diminish1 (mode &optional to-what)
-  "MODE TO-WHAT."
-  (message "diminish1 %s" mode)
-  (diminish2 mode (symbol-name mode) to-what))
+;; Nice characters to use: (C-x 8 C-h to see all characters)
+;; ❄☃Φ
+;; Some japanese: のぬるぬるスクロール＆ミニマッ
+  
+(defun clean-mode-line ()
+  (interactive)
+  (loop for cleaner in mode-line-cleaner-alist
+        do (let* ((mode (car cleaner))
+                  (mode-str (cdr cleaner))
+                  (old-mode-str (cdr (assq mode minor-mode-alist))))
+             (when old-mode-str
+               (setcar old-mode-str mode-str))
+             (when (eq mode major-mode)
+               (setq mode-name mode-str)))))
 
-;; (diminish2 'auto-complete-mode "auto-complete" " ☯")
-;; (diminish2 'paredit-mode "paredit"             " ☂")
-;; (diminish2 'projectile-mode "projectile"       " ⚑")
-;; (diminish2 'undo-tree-mode "undo-tree"         " ᚠ")
-;; (diminish2 'yas-minor-mode "yasnippet"         " ⌨")
-
-;; (diminish  'eldoc-mode " ✦")
-;; (diminish2 'elisp-slime-nav-mode "elisp-slime-nav")
-;; (diminish1 'prelude-mode)
-;; (diminish1 'rainbow-mode)
-;; (diminish2 'volatile-highlights-mode "volatile-highlights")
-;; (diminish2 'whitespace-mode "whitespace" " ☠")
+(add-hook 'after-change-major-mode-hook 'clean-mode-line)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Flymake Configuration
@@ -457,6 +483,9 @@
 
 (require 'd-mode)
 (add-hook 'd-mode-hook 'flymake-d-load)
+
+(require 'yaml-mode)
+(add-hook 'yaml-mode-hook 'flymake-yaml-load)
 
 (defadvice flymake-post-syntax-check (before flymake-force-check-was-interrupted)
   (setq flymake-check-was-interrupted t))
@@ -476,7 +505,9 @@
   (interactive)
   (insert (format "/**
    Copyright: © %s %s.
-   License: Subject to the terms of the MIT license, as written in the included LICENSE.txt file.
+   License:
+     Subject to the terms of the MIT license,
+     as written in the included LICENSE.txt file.
    Authors: %s
 */
 " (format-time-string "%Y") user-full-name user-full-name))
