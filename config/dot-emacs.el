@@ -505,9 +505,10 @@
   (interactive)
   (insert (format "/**
    Copyright: © %s %s.
-   License:
-     Subject to the terms of the MIT license,
-     as written in the included LICENSE.txt file.
+
+   License: Subject to the terms of the MIT license,
+   as written in the included LICENSE.txt file.
+
    Authors: %s
 */
 " (format-time-string "%Y") user-full-name user-full-name))
