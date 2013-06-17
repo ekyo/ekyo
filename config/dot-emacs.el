@@ -65,7 +65,7 @@
     magithub
     markdown-mode
     paredit
-    powerline
+;    powerline
     projectile
     python
     rainbow-mode
