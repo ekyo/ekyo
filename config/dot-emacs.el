@@ -434,7 +434,7 @@
 (setq initial-scratch-message nil)
 
 ;; Set font size
-(set-face-attribute 'default nil :height 100)
+(set-face-attribute 'default nil :height 80)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Mode line configuration
