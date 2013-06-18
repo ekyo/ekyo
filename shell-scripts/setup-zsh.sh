@@ -26,6 +26,8 @@ echo 'alias gp="g push"' >> .zshrc
 echo 'alias gpl="g pull --rebase origin master"' >> .zshrc
 echo 'alias gpla="g submodule foreach git pull --rebase origin master; gpl"' >> .zshrc
 echo 'alias ack="ack-grep"' >> .zshrc
+echo 'alias ack-coffee="ack --coffee"' >> .zshrc
+echo 'alias ack-d="ack --d"' >> .zshrc
 echo 'alias myip="curl -s http://checkrealip.com/ | grep \"Current IP Address\" ; ifconfig | grep \"inet addr:\""' >> .zshrc
 echo 'alias myip2="curl ifconfig.me"' >> .zshrc
 echo 'alias ping="mtr"' >> .zshrc
@@ -40,3 +42,8 @@ if [[ $INSIDE_EMACS != "" ]]; then
     stty -echo
 fi
 ' >> .bashrc
+
+echo "--type-set
+coffee=.coffee
+--type-set
+d=.d" > .ackrc
