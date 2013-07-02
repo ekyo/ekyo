@@ -23,8 +23,8 @@ ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[blue]%})"
 
 echo 'alias g="git"' >> .zshrc
 echo 'alias gp="g push"' >> .zshrc
-echo 'alias gpl="g pull --rebase origin master"' >> .zshrc
-echo 'alias gpla="g submodule foreach git pull --rebase origin master; gpl"' >> .zshrc
+echo 'alias gpl="g pull origin master"' >> .zshrc
+echo 'alias gpla="g submodule foreach git pull origin master; gpl"' >> .zshrc
 echo 'alias ack="ack-grep"' >> .zshrc
 echo 'alias ack-coffee="ack --coffee"' >> .zshrc
 echo 'alias ack-d="ack --d"' >> .zshrc
