@@ -528,11 +528,12 @@ class %sService : Service {
   mixin ServiceMixin;
 
   public {
-    void setup(Config conf) {
-  }
+    override void setup(Config config) {
+    }
 
-  void init() {
-    super.init();
+    override void init() {
+      super.init();
+    }
   }
 }
 
@@ -547,7 +548,7 @@ class %sServiceTest : ServiceTest!%sService {
   ;; Insert boilerplate for a Lodni Plugin
   (interactive
    (let ((name (read-string "Name: " nil 'my-history)))
-     (defvar Name (capitalize name)
+     (defvar Name (capitalize name))
        (insert-d-header)
        (insert (format "
 module plugin.%s;
@@ -557,11 +558,12 @@ class %sPlugin : Plugin {
   mixin PluginMixin;
 
   public {
-    void setup(Config conf) {
-  }
+    override void setup(Config config) {
+    }
 
-  void init() {
-    super.init();
+    override void init() {
+      super.init();
+    }
   }
 }
 
@@ -569,7 +571,7 @@ class %sPluginTest : PluginTest!%sPlugin {
   mixin TestMixin;
 }
 " name Name Name Name))
-       (end-of-line)))
+       (end-of-line))
    ))
 
 (provide 'dot-emacs)
