@@ -23,7 +23,7 @@ ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[blue]%})"
 ' > .oh-my-zsh/themes/robbyrussell.zsh-theme
 
 curl https://raw.github.com/rupa/z/master/z.sh > ~/z.sh
-echo '. ~/z.sh'
+echo '. ~/z.sh' >> .zshrc
 
 echo 'alias g="git"' >> .zshrc
 echo 'alias ga="g add ."' >> .zshrc
