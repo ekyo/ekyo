@@ -245,6 +245,21 @@
 (global-set-key (kbd "<f12>")
                 'indent-buffer)
 
+;; Remove trailing whitespace on save.
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
+
+(custom-set-faces
+ '(my-tab-face            ((((class color)) (:background "grey10"))) t)
+ '(my-trailing-space-face ((((class color)) (:background "gray10"))) t)
+ '(my-long-line-face ((((class color)) (:background "gray10"))) t))
+(add-hook 'font-lock-mode-hook
+          (function
+           (lambda ()
+             (setq font-lock-keywords
+                   (append font-lock-keywords
+                           '(("\t+" (0 'my-tab-face t))
+                             ("^.\\{81,\\}$" (0 'my-long-line-face t))
+                             ("[ \t]+$"      (0 'my-trailing-space-face t))))))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Kill current buffer
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -458,7 +473,7 @@
 ;; Nice characters to use: (C-x 8 C-h to see all characters)
 ;; ❄☃Φ
 ;; Some japanese: のぬるぬるスクロール＆ミニマッ
-  
+
 (defun clean-mode-line ()
   (interactive)
   (loop for cleaner in mode-line-cleaner-alist
