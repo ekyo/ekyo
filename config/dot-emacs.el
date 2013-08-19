@@ -65,7 +65,7 @@
     magithub
     markdown-mode
     paredit
-;    powerline
+                                        ;    powerline
     projectile
     python
     rainbow-mode
@@ -147,6 +147,103 @@
 (real-global-auto-complete-mode t)
 ;; delay before showing up
 (setq ac-auto-show-menu 0.1)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; CEDET Configuration
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(require 'cedet)
+
+(add-to-list  'Info-directory-list "~/projects/cedet-bzr/doc/info")
+
+(add-to-list 'semantic-default-submodes 'global-semanticdb-minor-mode)
+(add-to-list 'semantic-default-submodes 'global-semantic-mru-bookmark-mode)
+(add-to-list 'semantic-default-submodes 'global-semanticdb-minor-mode)
+(add-to-list 'semantic-default-submodes 'global-semantic-idle-scheduler-mode)
+(add-to-list 'semantic-default-submodes 'global-semantic-highlight-func-mode)
+
+(semantic-mode 1)
+
+(require 'semantic/ia)
+(require 'semantic/bovine/gcc)
+
+(semantic-add-system-include "~/exp/include/boost_1_37" 'c++-mode)
+
+(setq-mode-local c-mode semanticdb-find-default-throttle
+                 '(project unloaded system recursive))
+
+(mapc
+ (lambda (MODE)
+   (add-hook MODE
+             (lambda ()
+               (when (boundp 'semantic-ia-complete-symbol)
+                 (add-to-list 'completion-at-point-functions 'semantic-ia-complete-symbol))
+               (local-set-key [(control return)] 'semantic-ia-complete-symbol-menu)
+               (local-set-key "\C-c?" 'semantic-ia-complete-symbol)
+               (local-set-key "\C-c>" 'semantic-complete-analyze-inline)
+               (local-set-key "\C-c=" 'semantic-decoration-include-visit)
+               (local-set-key "\C-cj" 'semantic-ia-fast-jump)
+               (local-set-key "\C-cq" 'semantic-ia-show-doc)
+               (local-set-key "\C-cs" 'semantic-ia-show-summary)
+               (local-set-key "\C-cp" 'semantic-analyze-proto-impl-toggle)
+               ))) '(c-mode-common-hook lisp-mode-hook emacs-lisp-mode-hook))
+
+(add-hook 'c-mode-common-hook (lambda ()
+                                (local-set-key "\C-ct" 'eassist-switch-h-cpp)
+                                (local-set-key "\C-xt" 'eassist-switch-h-cpp)
+                                (local-set-key "\C-ce" 'eassist-list-methods)
+                                (local-set-key "\C-c\C-r" 'semantic-symref)))
+
+(semanticdb-enable-gnu-global-databases 'c-mode t)
+(semanticdb-enable-gnu-global-databases 'c++-mode t)
+
+;; EDE
+(global-ede-mode 1)
+(ede-enable-generic-projects)
+
+(defun qt-cedet-setup ()
+  "Set up c-mode and related modes. Includes support for Qt code (signal, slots and alikes)."
+
+  ;; add knowledge of qt to emacs
+  (setq qt4-base-dir (concat (getenv "QTDIR") "/include"))
+  (semantic-add-system-include (concat qt4-base-dir "/Qt") 'c++-mode)
+  (semantic-add-system-include (concat qt4-base-dir "/QtGui") 'c++-mode)
+  (semantic-add-system-include (concat qt4-base-dir "/QtCore") 'c++-mode)
+  (semantic-add-system-include (concat qt4-base-dir "/QtTest") 'c++-mode)
+  (semantic-add-system-include (concat qt4-base-dir "/QtNetwork") 'c++-mode)
+  (semantic-add-system-include (concat qt4-base-dir "/QtSvg") 'c++-mode)
+  (add-to-list 'auto-mode-alist (cons qt4-base-dir 'c++-mode))
+  (add-to-list 'semantic-lex-c-preprocessor-symbol-file (concat qt4-base-dir "/Qt/qconfig.h"))
+  (add-to-list 'semantic-lex-c-preprocessor-symbol-file (concat qt4-base-dir "/Qt/qconfig-large.h"))
+  (add-to-list 'semantic-lex-c-preprocessor-symbol-file (concat qt4-base-dir "/Qt/qglobal.h"))
+
+  ;; qt keywords and stuff ...
+  ;; set up indenting correctly for new qt kewords
+  (setq c-protection-key (concat "\\<\\(public\\|public slot\\|protected"
+                                 "\\|protected slot\\|private\\|private slot"
+                                 "\\)\\>")
+        c-C++-access-key (concat "\\<\\(signals\\|public\\|protected\\|private"
+                                 "\\|public slots\\|protected slots\\|private slots"
+                                 "\\)\\>[ \t]*:"))
+
+  ;; modify the colour of slots to match public, private, etc ...
+  (font-lock-add-keywords 'c++-mode '(("\\<\\(slots\\|signals\\)\\>" . font-lock-type-face)))
+  ;; make new font for rest of qt keywords
+  (make-face 'qt-keywords-face)
+  (set-face-foreground 'qt-keywords-face "BlueViolet")
+  ;; qt keywords
+  (font-lock-add-keywords 'c++-mode '(("\\<Q_[A-Z]*\\>" . 'qt-keywords-face)))
+  (font-lock-add-keywords 'c++-mode '(("\\<SIGNAL\\|SLOT\\>" . 'qt-keywords-face)))
+  (font-lock-add-keywords 'c++-mode '(("\\<Q[A-Z][A-Za-z]*\\>" . 'qt-keywords-face)))
+  (font-lock-add-keywords 'c++-mode '(("\\<Q[A-Z_]+\\>" . 'qt-keywords-face)))
+  (font-lock-add-keywords 'c++-mode
+                          '(("\\<q\\(Debug\\|Wait\\|Printable\\|Max\\|Min\\|Bound\\)\\>" . 'font-lock-builtin-face)))
+
+  (setq c-macro-names-with-semicolon '("Q_OBJECT" "Q_PROPERTY" "Q_DECLARE" "Q_ENUMS"))
+  (c-make-macro-with-semi-re)
+  )
+(when (getenv "QTDIR") (add-hook 'c-mode-common-hook 'qt-cedet-setup))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Full Screen (require 'wmctrl' installed)
@@ -249,16 +346,16 @@
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 (custom-set-faces
- '(my-tab-face            ((((class color)) (:background "grey10"))) t)
- '(my-trailing-space-face ((((class color)) (:background "gray10"))) t)
- '(my-long-line-face ((((class color)) (:background "gray10"))) t))
+ '(my-tab-face            ((((class color)) (:background "#7cfc00"))) t)
+ '(my-trailing-space-face ((((class color)) (:background "#ff1493"))) t)
+ '(my-long-line-face ((((class color)) (:background "#b22222"))) t))
 (add-hook 'font-lock-mode-hook
           (function
            (lambda ()
              (setq font-lock-keywords
                    (append font-lock-keywords
                            '(("\t+" (0 'my-tab-face t))
-                             ("^.\\{81,\\}$" (0 'my-long-line-face t))
+                             ("^.\\{120,\\}$" (0 'my-long-line-face t))
                              ("[ \t]+$"      (0 'my-trailing-space-face t))))))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Kill current buffer
@@ -328,6 +425,30 @@
      ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; tmux control from emacs
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(setq tmux-session-name 0)
+(setq tmux-window-name 1)
+(setq tmux-pane-number 1)
+
+(defun tmux-setup (x y z)
+  "Setup global variables for tmux session, window, and pane"
+  (interactive "sEnter tmux session name: \nsEnter tmux window name: \nsEnter tmux pane number: ")
+  (setq tmux-session-name x)
+  (setq tmux-window-name y)
+  (setq tmux-pane-number z)
+  (message "Tmux Setup, session name: %s, window name: %s, pane number: %s"
+           tmux-session-name tmux-window-name tmux-pane-number))
+
+(defun tmux-exec (command)
+  "Execute command in tmux pane"
+  (interactive)
+  (shell-command
+   (format "tmux send-keys -t %s:%s.%s '%s' Enter" tmux-session-name tmux-window-name tmux-pane-number command)))
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Howdoi inside emacs
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -340,6 +461,12 @@
 (global-set-key (kbd "C-c C-h")
                 'howdoi)
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ERC configuration
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(setq erc-hide-list '("JOIN" "PART" "QUIT"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Only enable linum-mode during goto-line
@@ -355,7 +482,7 @@
 
 (global-set-key (kbd "C-g")
                 'goto-line-with-feedback)
-;(global-set-key [remap goto-line] 'goto-line-with-feedback)
+                                        ;(global-set-key [remap goto-line] 'goto-line-with-feedback)
 
 (global-set-key (kbd "<f5>")
                 'linum-mode)
@@ -380,7 +507,7 @@
 (loop for ext in '("\\.swf$" "\\.elc$" "\\.pyc$")
       do (add-to-list 'helm-c-boring-file-regexp-list ext))
 (global-set-key (kbd "C-c C-f")
-               'helm-for-files)
+                'helm-for-files)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Haskell Mode Configuration
@@ -449,7 +576,7 @@
 (setq initial-scratch-message nil)
 
 ;; Set font size
-(set-face-attribute 'default nil :height 80)
+(set-face-attribute 'default nil :height 90)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Mode line configuration
@@ -564,8 +691,8 @@ class %sServiceTest : ServiceTest!%sService {
   (interactive
    (let ((name (read-string "Name: " nil 'my-history)))
      (defvar Name (capitalize name))
-       (insert-d-header)
-       (insert (format "
+     (insert-d-header)
+     (insert (format "
 module plugin.%s;
 import core.plugin;
 
@@ -586,8 +713,50 @@ class %sPluginTest : PluginTest!%sPlugin {
   mixin TestMixin;
 }
 " name Name Name Name))
-       (end-of-line))
+     (end-of-line))
    ))
 
 (provide 'dot-emacs)
 ;;; dot-emacs.el ends here
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ERC Color
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Pool of colors to use when coloring IRC nicks.
+(setq erc-colors-list '("green" "blue" "red"
+                        "dark gray" "dark orange"
+                        "dark magenta" "maroon"
+                        "indian red" "black" "forest green"
+                        "midnight blue" "dark violet"))
+;; special colors for some people
+(setq erc-nick-color-alist '(("ekyo" . "blue")
+                             ("lambdabot" . "red")
+                             ))
+
+(defun erc-get-color-for-nick (nick)
+  "Gets a color for NICK. If NICK is in erc-nick-color-alist,
+   use that color, else hash the nick and use a random color from the pool"
+  (or (cdr (assoc nick erc-nick-color-alist))
+      (nth
+       (mod (string-to-number
+             (substring (md5 (downcase nick)) 0 6) 16)
+            (length erc-colors-list))
+       erc-colors-list)))
+
+(defun erc-put-color-on-nick ()
+  "Modifies the color of nicks according to erc-get-color-for-nick"
+  (save-excursion
+    (goto-char (point-min))
+    (while (forward-word 1)
+      (setq bounds (bounds-of-thing-at-point 'word))
+      (setq word (buffer-substring-no-properties
+                  (car bounds) (cdr bounds)))
+      (when (or (and (erc-server-buffer-p) (erc-get-server-user word))
+                (and erc-channel-users (erc-get-channel-user word)))
+        (put-text-property (car bounds) (cdr bounds)
+                           'face (cons 'foreground-color
+                                       (erc-get-color-for-nick word)))))))
+
+(add-hook 'erc-insert-modify-hook 'erc-put-color-on-nick)
