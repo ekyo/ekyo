@@ -50,8 +50,11 @@
     expand-region
     flymake-coffee
     flymake-d
+    flymake-haskell-multi
     flymake-json
     flymake-yaml
+    ghc
+    ghci-completion
     gist
     groovy-mode
     haml-mode
@@ -65,11 +68,11 @@
     magithub
     markdown-mode
     paredit
-                                        ;    powerline
     projectile
     python
     rainbow-mode
     sass-mode
+    scion
     scss-mode
     smart-tabs-mode
     smex
@@ -244,20 +247,6 @@
   (c-make-macro-with-semi-re)
   )
 (when (getenv "QTDIR") (add-hook 'c-mode-common-hook 'qt-cedet-setup))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Full Screen (require 'wmctrl' installed)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defun full-screen-toggle ()
-  "toggle full-screen mode"
-  (interactive)
-  (shell-command "wmctrl -r :ACTIVE: -btoggle,fullscreen"))
-
-(global-set-key (kbd "<f11>")
-                'full-screen-toggle)
-
-;; Full screen after load
-;; (shell-command "wmctrl -r :ACTIVE: -badd,fullscreen")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Rename current buffer file
