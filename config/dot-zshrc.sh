@@ -22,10 +22,6 @@ gcommands(){ cat ~/.zshrc | grep 'alias g' | sed -e 's/alias //g' | grep "$@" ; 
 # Usage: gcheck
 alias gcheck="gdn --check"
 
-# Fix whitespace errors
-# Usage: gfix <file>
-gfix() { g stripspace < $@ > $@ ; }
-
 
 ## Git Create
 
@@ -287,3 +283,5 @@ lt() { ls -ltrsa "$@" | tail ; }
 psgrep() { ps axuf | grep -v grep | grep "$@" -i --color=auto ; }
 fname() { find . -iname "*$@*" ; }
 mkcd() { mkdir "$@" && wait && cd "$@" ; }
+explain(){ curl -s $(echo "http://explainshell.com/explain/$1?args=${@:2}" | sed -e 's/ /+/g') |
+    sed -n '/<pre/,/<\/pre>/p' | sed -s 's/<[^>]*>//g' | sed -e 's/^ *//g;s/ *$//g' | grep '.' | cat }

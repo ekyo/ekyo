@@ -3,7 +3,7 @@ sudo apt-get install -y \
     texinfo texlive \
     libxpm-dev libjpeg-dev libgif-dev libtiff4-dev libgtk2.0-dev \
     libncurses-dev libncurses5-dev \
-    aspell ack wmctrl fonts-inconsolata
+    aspell ack git fonts-inconsolata
 
 sudo add-apt-repository ppa:cassou/emacs
 sudo apt-get update
