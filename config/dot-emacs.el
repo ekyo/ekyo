@@ -113,12 +113,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Smooth scrolling
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(setq ;; scrolling
- scroll-margin 0                        ;; do smooth scrolling, ...
- scroll-conservatively 100000           ;; ... the defaults ...
- scroll-up-aggressively 0               ;; ... are very ...
- scroll-down-aggressively 0             ;; ... annoying
- scroll-preserve-screen-position t)     ;; preserve screen pos with C-v/M-v
+(setq
+ scroll-margin 0
+ scroll-conservatively 100000
+ scroll-up-aggressively 0
+ scroll-down-aggressively 0
+ scroll-preserve-screen-position t)
 
 (when (require 'sublimity nil t)
   (sublimity-scroll))
