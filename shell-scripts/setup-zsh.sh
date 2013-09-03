@@ -17,10 +17,11 @@ fi
 
 curl https://raw.github.com/ekyo/ekyo/master/config/dot-zshrc.sh > ~/.zshrc
 
-curl https://raw.github.com/ekyo/ekyo/master/config/ekyo.zsh-theme > ~.oh-my-zsh/themes/ekyo.zsh-theme
+curl https://raw.github.com/ekyo/ekyo/master/config/ekyo.zsh-theme > ~/.oh-my-zsh/themes/ekyo.zsh-theme
 
 # Commit my theme, so that it doesn't affect oh-my-zsh updates
-cd ~/.oh-my-zsh
+cd ~/.oh-my-zsh && wait
+git add themes/ekyo.zsh-theme
 git commit themes/ekyo.zsh-theme -m 'ekyo theme, based off wedisagree'
 
 # Sets zsh as default prompt
