@@ -56,6 +56,7 @@
     ghc
     ghci-completion
     gist
+    god-mode
     groovy-mode
     haml-mode
     haskell-mode
@@ -127,13 +128,27 @@
 (setq sublimity-scroll-weight2 1)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Org-mode hooks
+;; Org-mode
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'org-install)
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
 (define-key global-map (kbd "C-c l") 'org-store-link)
 (define-key global-map (kbd "C-c a") 'org-agenda)
 (setq org-log-done t)
+
+(defun my-update-cursor ()
+  (setq cursor-type (if (or god-local-mode buffer-read-only)
+                        'box
+                      'bar)))
+
+(add-hook 'god-mode-enabled-hook 'my-update-cursor)
+(add-hook 'god-mode-disabled-hook 'my-update-cursor)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; god-mode
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(global-set-key (kbd "<escape>") 'god-local-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Auto-complete
@@ -237,18 +252,6 @@
 ;; Remove trailing whitespace on save.
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
-(custom-set-faces
- '(my-tab-face            ((((class color)) (:background "#7cfc00"))) t)
- '(my-trailing-space-face ((((class color)) (:background "#ff1493"))) t)
- '(my-long-line-face ((((class color)) (:background "#b22222"))) t))
-(add-hook 'font-lock-mode-hook
-          (function
-           (lambda ()
-             (setq font-lock-keywords
-                   (append font-lock-keywords
-                           '(("\t+" (0 'my-tab-face t))
-                             ("^.\\{120,\\}$" (0 'my-long-line-face t))
-                             ("[ \t]+$"      (0 'my-trailing-space-face t))))))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Kill current buffer
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
