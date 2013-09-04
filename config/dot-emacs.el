@@ -509,6 +509,12 @@
 
 (add-hook 'after-change-major-mode-hook 'clean-mode-line)
 
+(set-face-attribute 'mode-line nil :box nil)
+
+(set-face-attribute 'mode-line-inactive nil
+                    :inverse-video t
+                    :box nil)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Flymake Configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
