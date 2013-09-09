@@ -277,6 +277,8 @@ alias update="sudo apt-get update -y"
 alias upgrade="sudo apt-get upgrade -uy"
 alias updagrade="update ; upgrade"
 alias apt-install="sudo apt-get install -y"
+alias serve="python -m SimpleHttpServer"
+alias serve3="python -m http.server"
 
 ### Generic Functions
 lt() { ls -ltrsa "$@" | tail ; }
