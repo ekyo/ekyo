@@ -8,6 +8,8 @@ plugins=(git git-flow screen battery)
 ZSH_THEME="ekyo"
 source $ZSH/oh-my-zsh.sh
 
+# copy a file from a remote host to a local one
+fetchr() { scp -P $2 $1:$3 $3 }
 
 ### Git Aliases
 
