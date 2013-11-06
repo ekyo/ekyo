@@ -470,6 +470,7 @@
 (set-default-font
  "-unknown-Inconsolata-normal-normal-normal-*-*-*-*-*-m-0-iso10646-1")
 
+
 ;; Remove comment from scratch
 (setq initial-scratch-message nil)
 

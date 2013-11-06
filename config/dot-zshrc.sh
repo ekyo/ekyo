@@ -287,3 +287,4 @@ fname() { find . -iname "*$@*" ; }
 mkcd() { mkdir "$@" && wait && cd "$@" ; }
 explain(){ curl -s $(echo "http://explainshell.com/explain/$1?args=${@:2}" | sed -e 's/ /+/g') |
     sed -n '/<pre/,/<\/pre>/p' | sed -s 's/<[^>]*>//g' | sed -e 's/^ *//g;s/ *$//g' | grep '.' | cat }
+transfer() { tar zcf - "$2" | ssh "$1" "tar xvzf -" }
