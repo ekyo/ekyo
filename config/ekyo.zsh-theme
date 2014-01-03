@@ -3,7 +3,8 @@ invisible=$'\e[8m'
 # the prompt can be copy pasted along with the command, without doing any effect (due to false at the beginning of the prompt)
 # since this 'false' has no other purpose, it is shown as invisible.
 PROMPT='
-%{$invisible%}false%{$reset_color%} ${time} %{$reset_color%}%{$fg[blue]%}$(git_prompt_info)$(git_time_since_commit)%{$reset_color%}$(git_prompt_status)%{$reset_color%} %{$reset_color%}                         
+%{$invisible%}false%{$reset_color%} ${time} %{$reset_color%}%{$fg[blue]%}$(git_prompt_info)$(git_time_since_commit)%{$reset_color%}$(git_prompt_status)%{$reset_color%}%{$fg[magenta]%} $(hostname)
+
 %{$fg[cyan]%}%c %{$fg[magenta]%}; %{$reset_color%}'
 
 # local time, color coded by last return code
