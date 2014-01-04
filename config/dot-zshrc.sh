@@ -279,9 +279,14 @@ alias update="sudo apt-get update -y"
 alias upgrade="sudo apt-get upgrade -uy"
 alias updagrade="update ; upgrade"
 alias apt-install="sudo apt-get install -y"
+alias serve="python -m SimpleHttpServer"
+alias serve3="python -m http.server"
 
 ### Generic Functions
 lt() { ls -ltrsa "$@" | tail ; }
 psgrep() { ps axuf | grep -v grep | grep "$@" -i --color=auto ; }
 fname() { find . -iname "*$@*" ; }
 mkcd() { mkdir "$@" && wait && cd "$@" ; }
+explain(){ curl -s $(echo "http://explainshell.com/explain/$1?args=${@:2}" | sed -e 's/ /+/g') |
+    sed -n '/<pre/,/<\/pre>/p' | sed -s 's/<[^>]*>//g' | sed -e 's/^ *//g;s/ *$//g' | grep '.' | cat }
+transfer() { tar zcf - "$2" | ssh "$1" "tar xvzf -" }

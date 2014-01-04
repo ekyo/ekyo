@@ -1,7 +1,11 @@
+invisible=$'\e[8m'
 
-PROMPT='%{$fg[cyan]%}え京 %{$reset_color%}'
+# the prompt can be copy pasted along with the command, without doing any effect (due to false at the beginning of the prompt)
+# since this 'false' has no other purpose, it is shown as invisible.
+PROMPT='
+%{$invisible%}false%{$reset_color%} ${time} %{$reset_color%}%{$fg[blue]%}$(git_prompt_info)$(git_time_since_commit)%{$reset_color%}$(git_prompt_status)%{$reset_color%}%{$fg[magenta]%} $(hostname)
 
-RPROMPT='%{$fg_bold[magenta]%}%c%{$reset_color%}%{$fg[blue]%}$(git_prompt_info)$(git_time_since_commit)%{$reset_color%}$(git_prompt_status)%{$reset_color%} ${time}%{$reset_color%}'
+%{$fg[cyan]%}%c %{$fg[magenta]%}; %{$reset_color%}'
 
 # local time, color coded by last return code
 time_enabled="%(?.%{$fg[green]%}.%{$fg[red]%})%*%{$reset_color%}"
