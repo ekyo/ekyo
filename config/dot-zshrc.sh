@@ -3,7 +3,7 @@
 
 # oh-my-zsh configuration.
 ZSH=$HOME/.oh-my-zsh
-export PATH=$PATH
+export PATH=$PATH:~/.cabal/bin
 plugins=(git git-flow screen battery)
 ZSH_THEME="ekyo"
 source $ZSH/oh-my-zsh.sh
@@ -285,5 +285,3 @@ lt() { ls -ltrsa "$@" | tail ; }
 psgrep() { ps axuf | grep -v grep | grep "$@" -i --color=auto ; }
 fname() { find . -iname "*$@*" ; }
 mkcd() { mkdir "$@" && wait && cd "$@" ; }
-explain(){ curl -s $(echo "http://explainshell.com/explain/$1?args=${@:2}" | sed -e 's/ /+/g') |
-    sed -n '/<pre/,/<\/pre>/p' | sed -s 's/<[^>]*>//g' | sed -e 's/^ *//g;s/ *$//g' | grep '.' | cat }
