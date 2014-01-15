@@ -3,7 +3,7 @@
 
 # oh-my-zsh configuration.
 ZSH=$HOME/.oh-my-zsh
-export PATH=$PATH
+export PATH=$PATH:~/.cabal/bin
 plugins=(git git-flow screen battery)
 ZSH_THEME="ekyo"
 source $ZSH/oh-my-zsh.sh

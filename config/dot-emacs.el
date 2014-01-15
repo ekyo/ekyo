@@ -56,6 +56,7 @@
     ghc
     ghci-completion
     gist
+    git-gutter+
     god-mode
     groovy-mode
     haml-mode
@@ -356,6 +357,10 @@
 (global-set-key (kbd "C-c C-h")
                 'howdoi)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Use mouse in terminal. eh... it can be of use sometimes
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(xterm-mouse-mode t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; ERC configuration
@@ -399,8 +404,6 @@
 (require 'helm-files)
 (setq helm-idle-delay 0.1)
 (setq helm-input-idle-delay 0.1)
-(loop for ext in '("\\.swf$" "\\.elc$" "\\.pyc$")
-      do (add-to-list 'helm-c-boring-file-regexp-list ext))
 (global-set-key (kbd "C-c C-f")
                 'helm-for-files)
 
@@ -437,18 +440,18 @@
 ;;
 (set-default 'truncate-lines nil)
 (setq truncate-partial-width-windows nil)
-(set-face-attribute 'show-paren-match-face nil :underline t)
+
 (setq cursor-type 'bar)
 (setq echo-keystrokes 0.01)
 (setq frame-title-format '("%f - " user-real-login-name "@" system-name))
 (setq inhibit-startup-screen t)
-(setq show-paren-delay 0)
+
 (blink-cursor-mode t)
 (column-number-mode t)
 (global-hl-line-mode t)
 (menu-bar-mode -1)
 (scroll-bar-mode -1)
-(show-paren-mode t)
+
 (tool-bar-mode -1)
 (which-function-mode t)
 (setq ido-create-new-buffer 'always)
@@ -467,8 +470,16 @@
 (flyspell-mode 0)
 (flyspell-prog-mode)
 
+;; show paren mode
+(show-paren-mode t)
+(setq show-paren-delay 0)
+(set-face-attribute 'show-paren-match-face nil :underline t)
+
+;;(set-default-font
+;; "-unknown-Inconsolata-normal-normal-normal-*-*-*-*-*-m-0-iso10646-1")
+
 (set-default-font
- "-unknown-Inconsolata-normal-normal-normal-*-*-*-*-*-m-0-iso10646-1")
+ "-unknown-Ubuntu Mono-normal-normal-normal-*-*-*-*-*-m-0-iso10646-1")
 
 
 ;; Remove comment from scratch
@@ -485,6 +496,12 @@
 (add-hook 'create-frame-hook 'refresh-cursor-color)
 (define-key global-map (kbd "C-c C-c") 'refresh-cursor-color)
 (refresh-cursor-color)
+
+;; C-n inserts newline if point at end of buffer
+(setq next-line-add-newlines t)
+
+;; Show diff with last commit while editing a file, shows oneOf "+=- " in margin
+(global-git-gutter+-mode t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Mode line configuration
