@@ -488,12 +488,21 @@
 ;; Set font size
 (set-face-attribute 'default nil :height 90)
 
+;; Set cursor color
+(defun refresh-cursor-color ()
+  (interactive ())
+  (set-cursor-color "#AEFEBD"))
+
+(add-hook 'create-frame-hook 'refresh-cursor-color)
+(define-key global-map (kbd "C-c C-c") 'refresh-cursor-color)
+(refresh-cursor-color)
 
 ;; C-n inserts newline if point at end of buffer
 (setq next-line-add-newlines t)
 
 ;; Show diff with last commit while editing a file, shows oneOf "+=- " in margin
 (global-git-gutter+-mode t)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Mode line configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
