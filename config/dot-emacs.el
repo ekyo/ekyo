@@ -477,6 +477,15 @@
 ;; Set font size
 (set-face-attribute 'default nil :height 90)
 
+;; Set cursor color
+(defun refresh-cursor-color ()
+  (interactive ())
+  (set-cursor-color "#AEFEBD"))
+
+(add-hook 'create-frame-hook 'refresh-cursor-color)
+(define-key global-map (kbd "C-c C-c") 'refresh-cursor-color)
+(refresh-cursor-color)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Mode line configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
