@@ -1,8 +1,8 @@
 # Install Redis
 cd ~
-wget http://redis.googlecode.com/files/redis-2.6.13.tar.gz
-tar xzf redis-2.6.13.tar.gz
-cd redis-2.6.13
+wget http://download.redis.io/releases/redis-2.8.6.tar.gz
+tar xzf redis-2.8.6.tar.gz
+cd redis-2.8.6
 make
 sudo make install
 [ ! -f "/usr/local/bin/redis-server" ] && sudo cp redis-server /usr/local/bin/
