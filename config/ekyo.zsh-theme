@@ -3,7 +3,7 @@ invisible=$'\e[8m'
 # the prompt can be copy pasted along with the command, without doing any effect (due to false at the beginning of the prompt)
 # since this 'false' has no other purpose, it is shown as invisible.
 PROMPT='
-%{$invisible%}false%{$reset_color%} ${time} %{$reset_color%}%{$fg[blue]%}$(git_prompt_info)$(git_time_since_commit)%{$reset_color%}$(git_prompt_status)%{$reset_color%}%{$fg[magenta]%} $(hostname)
+%{$invisible%}false%{$reset_color%} ${time} %{$reset_color%}%{$fg[blue]%}$(git_prompt_info)$(git_time_since_commit)%{$reset_color%}$(git_prompt_status)%{$reset_color%}%{$fg[magenta]%} $(hostname) $(cabal_sandbox_info)
 %{$fg[cyan]%}%c %{$fg[magenta]%}; %{$reset_color%}'
 
 # local time, color coded by last return code
@@ -28,6 +28,16 @@ ZSH_THEME_GIT_PROMPT_UNMERGED="%{$fg_bold[magenta]%} ♒" # ⓤ ⑊
 # ✡ ✔ ✖ ✚ ✱ ✤ ✦ ❤ ➜ ➟ ➼ ✂ ✎ ✐ ⨀ ⨁ ⨂ ⨍ ⨎ ⨏
 # ⬅ ⬆ ⬇ ⬈ ⬉ ⬊ ⬋ ⬒ ⬓ ⬔ ⬕ ⬖ ⬗ ⬘ ⬙ ⬟  ⬤ 〒 ǀ ǁ ǂ ĭ Ť Ŧ
 
+function cabal_sandbox_info() {
+    cabal_files=(*.cabal(N))
+    if [ $#cabal_files -gt 0 ]; then
+        if [ -f cabal.sandbox.config ]; then
+            echo "%{$fg[green]%}sandboxed%{$reset_color%}"
+        else
+            echo "%{$fg[red]%}not sandboxed%{$reset_color%}"
+        fi
+    fi
+}
 
 # Determine the time since last commit. If branch is clean,
 # use a neutral color, otherwise colors will vary according to time.

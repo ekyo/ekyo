@@ -1,29 +1,29 @@
 ;;; dot-emacs.el --- Ekyo's configuration;;;
-
+;;
 ;; Copyright (c) 2012, 2013 Simon Kérouack <ekyo777@gmail.com>
 ;;
 ;; Author: Simon Kérouack <ekyo777@gmail.com>
 ;; URL: https://github.com/ekyo/ekyo
-
+;;
 ;; This file is not part of GNU Emacs.
-
+;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
 ;; (at your option) any later version.
-
+;;
 ;; This program is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;; GNU General Public License for more details.
-
+;;
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-;;; Commentary:p
-
+;;
+;;; Commentary:
+;;
 ;; Configuration I use on a daily basis.  Use whatever you like.
-
+;;
 ;;; Code:
 
 (eval-when-compile (require 'cl))
@@ -67,8 +67,9 @@
     inf-ruby
     linum-relative
     magit
-    magithub
+    ;magithub
     markdown-mode
+    multi-term
     paredit
     projectile
     python
@@ -83,12 +84,27 @@
     yaml-mode
     yari
     yasnippet
+    zeal-at-point
     )
   "A list of packages to ensure are installed at launch.")
 
 (message "%s" "Emacs Prelude is now refreshing its package database...")
 (package-refresh-contents)
 (message "%s" " done.")
+
+
+(defun require-package (package &optional min-version no-refresh)
+  "Install given PACKAGE, optionally requiring MIN-VERSION.
+If NO-REFRESH is non-nil, the available package lists will not be
+re-downloaded in order to locate PACKAGE."
+  (if (package-installed-p package min-version)
+      t
+    (if (or (assoc package package-archive-contents) no-refresh)
+        (package-install package)
+      (progn
+        (package-refresh-contents)
+        (require-package package min-version t)))))
+
 
 (defun package-require (pkg)
   "Install a package only if it's not already installed."
@@ -97,7 +113,7 @@
 
 ;; install the missing packages
 (dolist (p ekyo-packages)
-  (package-require p))
+  (require-package p))
 
 (provide 'ekyo-packages)
 
@@ -161,7 +177,7 @@
   auto-complete-mode (lambda ()
                        (if (not (minibufferp (current-buffer)))
                            (auto-complete-mode 1)
-                         (ac-flyspell-workaround))
+                         ());(ac-flyspell-workaround))
                        ))
 (real-global-auto-complete-mode t)
 ;; delay before showing up
@@ -192,6 +208,40 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Indentation Hacks
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; yank indent
+;; Automatically indent yanked text if in a programming mode.
+(defvar yank-indent-modes
+  '(emacs-lisp-mode c-mode c++-mode js2-mode emacs-lisp-mode
+                    LaTeX-mode prolog-mode python-mode scheme-mode)
+  "Modes in which to indent regions that are yanked (or yank-popped)")
+
+(defvar yank-advised-indent-threshold 1000
+  "Threshold (# chars) over which indentation does not automatically occur.")
+
+(defun yank-advised-indent-function (beg end)
+  "Do indentation, as long as the region isn't too large."
+  (if (<= (- end beg) yank-advised-indent-threshold)
+      (indent-region beg end nil)))
+
+(defadvice yank (after yank-indent activate)
+  "If current mode is one of 'yank-indent-modes, indent yanked text
+(with prefix arg don't indent)."
+  (if (and (not (ad-get-arg 0))
+           (member major-mode yank-indent-modes))
+      (let ((transient-mark-mode nil))
+        (yank-advised-indent-function (region-beginning) (region-end)))))
+
+(defadvice yank-pop (after yank-pop-indent activate)
+  "If current mode is one of 'yank-indent-modes, indent yanked text
+(with prefix arg don't indent)."
+  (if (and (not (ad-get-arg 0))
+           (member major-mode yank-indent-modes))
+      (let ((transient-mark-mode nil))
+        (yank-advised-indent-function (region-beginning) (region-end)))))
+
+(setq whitespace-line-column 120) ;; limit line length
+
 (defun iwb ()
   "indent whole buffer"
   (interactive)
@@ -404,6 +454,7 @@
 (require 'helm-files)
 (setq helm-idle-delay 0.1)
 (setq helm-input-idle-delay 0.1)
+(add-to-list 'helm-boring-file-regexp-list ".local/share/Trash")
 (global-set-key (kbd "C-c C-f")
                 'helm-for-files)
 
@@ -430,6 +481,10 @@
 
 (global-set-key (kbd "C-c C-s")
                 'shell)
+
+(global-set-key (kbd "C-c C-d")
+                'zeal-at-point)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Theme Adjustments
@@ -468,25 +523,25 @@
 (smex-initialize)
 
 (flyspell-mode 0)
-(flyspell-prog-mode)
+;(flyspell-prog-mode)
 
 ;; show paren mode
 (show-paren-mode t)
 (setq show-paren-delay 0)
 (set-face-attribute 'show-paren-match-face nil :underline t)
 
-;;(set-default-font
-;; "-unknown-Inconsolata-normal-normal-normal-*-*-*-*-*-m-0-iso10646-1")
-
 (set-default-font
- "-unknown-Ubuntu Mono-normal-normal-normal-*-*-*-*-*-m-0-iso10646-1")
+ "-unknown-Inconsolata-normal-normal-normal-*-*-*-*-*-m-0-iso10646-1")
+
+;(set-default-font
+; "-unknown-Ubuntu Mono-normal-normal-normal-*-*-*-*-*-m-0-iso10646-1")
 
 
 ;; Remove comment from scratch
 (setq initial-scratch-message nil)
 
 ;; Set font size
-(set-face-attribute 'default nil :height 90)
+(set-face-attribute 'default nil :height 110)
 
 ;; Set cursor color
 (defun refresh-cursor-color ()
@@ -506,6 +561,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Mode line configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(powerline-default-theme)
 
 (defvar mode-line-cleaner-alist
   '((auto-complete-mode . " ☯")
@@ -527,6 +584,7 @@
 ;; Some japanese: のぬるぬるスクロール＆ミニマッ
 
 (defun clean-mode-line ()
+  "Replace frequent modes with single characters on the mode line."
   (interactive)
   (loop for cleaner in mode-line-cleaner-alist
         do (let* ((mode (car cleaner))
@@ -542,13 +600,15 @@
 (set-face-attribute 'mode-line nil :box nil)
 
 (set-face-attribute 'mode-line-inactive nil
-                    :inverse-video t
+                    :inverse-video nil
                     :box nil)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Flymake Configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'flymake-coffee)
+(setq flymake-log-level 3)
+(setq flymake-coffee-coffeelint-configuration-file "/usr/lib/node_modules/coffeelint/coffeelint.json")
 (add-hook 'coffee-mode-hook 'flymake-coffee-load)
 
 (require 'flymake-json)
@@ -561,6 +621,7 @@
 (add-hook 'yaml-mode-hook 'flymake-yaml-load)
 
 (defadvice flymake-post-syntax-check (before flymake-force-check-was-interrupted)
+  "."
   (setq flymake-check-was-interrupted t))
 (ad-activate 'flymake-post-syntax-check)
 
