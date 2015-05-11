@@ -44,6 +44,7 @@
     coffee-mode
     color-theme-monokai
     color-theme-sanityinc-tomorrow
+    csharp-mode
     deft
     diminish
     d-mode
@@ -56,7 +57,7 @@
     ghc
     ghci-completion
     gist
-    git-gutter+
+    ;git-gutter+
     god-mode
     groovy-mode
     haml-mode
@@ -70,6 +71,7 @@
     ;magithub
     markdown-mode
     multi-term
+    omnisharp
     paredit
     projectile
     python
@@ -171,17 +173,63 @@ re-downloaded in order to locate PACKAGE."
 ;; Auto-complete
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+; Load auto-complete-mode on startup
+; autocomplete - Emacs auto-complete-mode at startup - Stack Overflow
+; http://stackoverflow.com/questions/8095715/emacs-auto-complete-mode-at-startup
 (require 'auto-complete)
-;; Enable everywhere
+(require 'auto-complete-config)
+(setq ac-ignore-case t)
+(add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
+(ac-config-default)
+(global-auto-complete-mode t)
+(auto-complete-mode t)
+; Dirty hack to enable auto-complete-mode in all modes except the
+; minibuffer mode.
+;; dirty fix for having AC everywhere
 (define-globalized-minor-mode real-global-auto-complete-mode
   auto-complete-mode (lambda ()
                        (if (not (minibufferp (current-buffer)))
-                           (auto-complete-mode 1)
-                         ());(ac-flyspell-workaround))
-                       ))
+                           (auto-complete-mode 1))))
 (real-global-auto-complete-mode t)
-;; delay before showing up
-(setq ac-auto-show-menu 0.1)
+(setq ac-use-menu-map t)
+; Cycle candidates with C-n and C-p
+(define-key ac-menu-map "\C-n" 'ac-next)
+(define-key ac-menu-map "\C-p" 'ac-previous)
+
+; Isearch auto-complete results with control-space.
+; This is the most natural mapping for me.
+(define-key ac-menu-map (kbd "C-SPC") 'ac-isearch)
+
+; Search in all open buffers with C-M-SPC
+;;(define-key evil-insert-state-map (kbd "C-M-SPC") 'ac-complete-words-in-all-buffer)
+
+; A more ergonomic mapping to start auto-completing. Though this
+; will mess up my writing sometimes. TODO
+;; https://github.com/auto-complete/auto-complete/issues/188
+;;(define-key evil-insert-state-map (kbd "C-SPC")
+;;  (lambda ()
+;;    (interactive)
+;;    (auto-complete)
+;;    (ac-complete-with-helm)))
+
+(require 'ac-helm)
+(define-key ac-complete-mode-map (kbd "C-:") 'ac-complete-with-helm)
+(define-key popup-menu-keymap (kbd "C-:") 'ac-complete-with-helm)
+
+; Delay before automatically showing the completion popup menu.
+; In seconds.
+(setq ac-delay 0.1)
+
+; Auto-complete, by default, will search for matching words in
+; buffers in the same mode, and snippets
+(setq-default ac-sources
+              '(ac-source-words-in-same-mode-buffers
+                ac-source-abbrev
+                ac-source-yasnippet))
+
+;; Start auto-complete automatically when 3 chars have been
+;; entered
+(setq ac-auto-start 0)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Rename current buffer file
@@ -496,7 +544,7 @@ re-downloaded in order to locate PACKAGE."
 (set-default 'truncate-lines nil)
 (setq truncate-partial-width-windows nil)
 
-(setq cursor-type 'bar)
+(bar-cursor-mode t)
 (setq echo-keystrokes 0.01)
 (setq frame-title-format '("%f - " user-real-login-name "@" system-name))
 (setq inhibit-startup-screen t)
@@ -556,13 +604,11 @@ re-downloaded in order to locate PACKAGE."
 (setq next-line-add-newlines t)
 
 ;; Show diff with last commit while editing a file, shows oneOf "+=- " in margin
-(global-git-gutter+-mode t)
+;(global-git-gutter+-mode t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Mode line configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(powerline-default-theme)
 
 (defvar mode-line-cleaner-alist
   '((auto-complete-mode . " ☯")
