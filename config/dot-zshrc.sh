@@ -5,7 +5,7 @@
 ZSH=$HOME/.oh-my-zsh
 export PATH=$PATH:~/.cabal/bin
 plugins=(git git-flow screen battery)
-ZSH_THEME="ekyo"
+ZSH_THEME="../../ekyo"
 source $ZSH/oh-my-zsh.sh
 
 # copy a file from a remote host to a local one

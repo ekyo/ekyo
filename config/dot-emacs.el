@@ -131,22 +131,6 @@ re-downloaded in order to locate PACKAGE."
 (setq backup-directory-alist (quote ((".*" . "~/.emacs_backups/"))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Smooth scrolling
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(setq
- scroll-margin 0
- scroll-conservatively 100000
- scroll-up-aggressively 0
- scroll-down-aggressively 0
- scroll-preserve-screen-position t)
-
-(when (require 'sublimity nil t)
-  (sublimity-scroll))
-
-(setq sublimity-scroll-weight1 1)
-(setq sublimity-scroll-weight2 1)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Org-mode
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'org-install)
@@ -155,19 +139,7 @@ re-downloaded in order to locate PACKAGE."
 (define-key global-map (kbd "C-c a") 'org-agenda)
 (setq org-log-done t)
 
-(defun my-update-cursor ()
-  (setq cursor-type (if (or god-local-mode buffer-read-only)
-                        'box
-                      'bar)))
-
-(add-hook 'god-mode-enabled-hook 'my-update-cursor)
-(add-hook 'god-mode-disabled-hook 'my-update-cursor)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; god-mode
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(global-set-key (kbd "<escape>") 'god-local-mode)
+(setq cursor-type 'bar)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Auto-complete
@@ -212,9 +184,6 @@ re-downloaded in order to locate PACKAGE."
 ;;    (auto-complete)
 ;;    (ac-complete-with-helm)))
 
-(require 'ac-helm)
-(define-key ac-complete-mode-map (kbd "C-:") 'ac-complete-with-helm)
-(define-key popup-menu-keymap (kbd "C-:") 'ac-complete-with-helm)
 
 ; Delay before automatically showing the completion popup menu.
 ; In seconds.
@@ -308,7 +277,9 @@ re-downloaded in order to locate PACKAGE."
 
 ;; Using smart-tabs
 (setq standard-indent 2)
-(setq-default tab-width 2) ; or any other preferred value
+(setq-default tab-width 2)
+(setq js-indent-level 2)
+(setq c-basic-offset 2)
 (setq cua-auto-tabify-rectangles nil)
 (defadvice align (around smart-tabs activate)
   (let ((indent-tabs-mode nil)) ad-do-it))
@@ -544,7 +515,6 @@ re-downloaded in order to locate PACKAGE."
 (set-default 'truncate-lines nil)
 (setq truncate-partial-width-windows nil)
 
-(bar-cursor-mode t)
 (setq echo-keystrokes 0.01)
 (setq frame-title-format '("%f - " user-real-login-name "@" system-name))
 (setq inhibit-startup-screen t)
@@ -578,12 +548,11 @@ re-downloaded in order to locate PACKAGE."
 (setq show-paren-delay 0)
 (set-face-attribute 'show-paren-match-face nil :underline t)
 
-(set-default-font
- "-unknown-Inconsolata-normal-normal-normal-*-*-*-*-*-m-0-iso10646-1")
+;(set-default-font
+; "-unknown-Inconsolata-normal-normal-normal-*-*-*-*-*-m-0-iso10646-1")
 
 ;(set-default-font
 ; "-unknown-Ubuntu Mono-normal-normal-normal-*-*-*-*-*-m-0-iso10646-1")
-
 
 ;; Remove comment from scratch
 (setq initial-scratch-message nil)

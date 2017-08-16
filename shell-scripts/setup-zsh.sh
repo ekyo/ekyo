@@ -2,7 +2,7 @@
 
 cd ~
 sudo apt-get install -y zsh git git-flow
-curl https://raw.github.com/rupa/z/master/z.sh > ~/z.sh
+curl -L https://raw.github.com/rupa/z/master/z.sh > ~/z.sh
 
 # Fetch oh-my-zsh if not already there, apply minor edits
 if [ ! -d .oh-my-zsh ]; then
@@ -15,14 +15,9 @@ if [ -e .zshrc ]; then
     rm .zshrc
 fi
 
-curl https://raw.github.com/ekyo/ekyo/master/config/dot-zshrc.sh > ~/.zshrc
+curl -L https://raw.github.com/ekyo/ekyo/master/config/dot-zshrc.sh > ~/.zshrc
 
-curl https://raw.github.com/ekyo/ekyo/master/config/ekyo.zsh-theme > ~/.oh-my-zsh/themes/ekyo.zsh-theme
-
-# Commit my theme, so that it doesn't affect oh-my-zsh updates
-cd ~/.oh-my-zsh && wait
-git add themes/ekyo.zsh-theme
-git commit themes/ekyo.zsh-theme -m 'ekyo theme, based off wedisagree'
+curl -L https://raw.github.com/ekyo/ekyo/master/config/ekyo.zsh-theme > ~/.oh-my-zsh/themes/ekyo.zsh-theme
 
 # Sets zsh as default prompt
 sudo chsh -s /usr/bin/zsh
